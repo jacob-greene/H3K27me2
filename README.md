@@ -28,7 +28,7 @@ jupyter lab 250214_growth_viability_cellcycle_pub.ipynb # reads only data/ as sh
 # must look like "Expected data/ layout" below.
 ```
 
-**Every path in this repository is relative to the repository root.** Start Jupyter from
+**Every path in this repo is relative to the repository root.** Start Jupyter from
 the repository root, and run the shell/R scripts from the repository root
 (`bash processing_scripts/RIFs_RepliTag.sh`).
 
@@ -160,19 +160,6 @@ bigWigs.
 **Upstream of everything — read trimming and alignment.** `filter_sams*.sh` consume
 duplicate-marked bowtie2 SAMs, which the authors produced with a lab-internal pipeline that
 is not in this repository. `geo_to_sams.sh` can help process fastqs into sam files; the raw reads are in GEO `GSE327802`.
-
-**Intermediate tables with no producer**, which must come from the Zenodo archive:
-
-- `data/results/mtf2_nucleation/nuc_cpgonly_spread_bins.tsv.gz` — the 1-kb-bin analysis
-  frame that all of `260801_nucleation_pub.ipynb` is built on (site class, super-domain,
-  replication timing, per-fraction H3K27me3). Nothing here produces it.
-- `data/2024/SH_all_data/peakPRINT_50/MERGED_downsampled_bins.tsv`,
-  `.../downsample_peakPRINT_slope1_min300/reproducibility/FRiPs_merged_intervals_rep95.tsv`
-- `data/2024/SH_all_data/sections4/*.txt` and `All_sams4.txt` (BAM path manifests)
-- `data/2024/ENCODE_chromHMM/{FRIPs,OverlapEnrichments}.tsv` and
-  `data/2024/cCREs/intersected_annos/FRIPs.tsv` (ChromHMM `OverlapEnrichment` output)
-- `data/2024/RepliTag/bws_bulk/` — assembled by hand from the `bam2bed2bw.sh` bigWigs plus
-  the lifted Repli-seq track; no script does the assembly
 
 ---
 
