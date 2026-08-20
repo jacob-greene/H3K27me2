@@ -71,7 +71,7 @@ see [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for the terms.
 
 ## Notebooks
 
-### Which notebooks need no local data
+### These notebooks need no local data
 
 - **`K27me3_states_111epigenomes_pub.ipynb`** needs **no `data/` files at all**. It
   downloads the Roadmap Epigenomics core-marks segmentations from S3 at run time. It does
