@@ -7,6 +7,10 @@ figures/**
 !figures/*/
 !figures/**/.gitkeep
 
+# Slurm job logs — several processing scripts `mkdir -p logs` at the repo root
+logs/
+*.log
+
 # Processed data — download from Zenodo (10.5281/zenodo.19489947).
 # The three items below ship with the repository; everything else does not.
 data/**

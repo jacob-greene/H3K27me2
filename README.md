@@ -35,9 +35,9 @@ the repository root, and run the shell/R scripts from the repository root
 ```
 H3K27me2/
 ├── *_pub.ipynb              8 publication notebooks (the figures)
-├── processing scripts/      19 scripts that build the processed data
+├── processing scripts/      19 scripts + 1 notebook that build the processed data
 ├── data/                    input data — mostly downloaded from Zenodo (see below)
-├── figures/                 created by the notebooks; PDFs land here
+├── figures/                 created by the notebooks; PDFs and figure-source TSVs land here
 └── paper.md                 methods excerpt / data-availability statement
 ```
 
@@ -69,7 +69,7 @@ ships in this repository alone.
 | Notebook | Input | Source |
 |---|---|---|
 | **250214_growth_viability** | `data/250214_K27me123ac_P2S25p_TAZEEDUTX_cell_counts.xlsx` | **in repo** |
-| | `data/20260206_drug_8only_aurora/*.csv` (16 flow exports) | **in repo** |
+| | `data/20260206_drug_8only_aurora/*.csv` (15 flow exports) | **in repo** |
 | **K27me3_states_111epigenomes** | Roadmap Epigenomics S3 bucket | downloaded at run time |
 | **250411_peakPrint_clean** | `data/2024/SH_all_data/peakPRINT_50/MERGED_downsampled_bins.tsv` | Zenodo |
 | | `.../min350/downsample_peakPRINT_slope1_min350_meta_v{1,2}.tsv`, `..._min300_meta_v3.tsv` | `downsample_peakPRINT.sh` |
@@ -86,7 +86,7 @@ ships in this repository alone.
 | | `data/2024/K562_annotations/processed_beds/sorted/gencode.v44.basic.TSS-1000_TES_sorted.bed` | **blocked** |
 | | `data/2024/LAD_data/JG_coding_genes_maxRPKM.tsv` | WT notebook |
 | **260801_nucleation** | `data/results/mtf2_nucleation/nuc_cpgonly_spread_bins.tsv.gz` | **blocked** |
-| | `data/results/mtf2_nucleation/per_bin_covcorr_full.tsv.gz` | **blocked** |
+| | `data/results/mtf2_nucleation/per_bin_covcorr_full.tsv.gz` | `260728_mtf2_correlation_nucleation_JG.ipynb` |
 | | `data/results/replitag_sphase_nucleation/matrices/encode_coremarks.1000bp.rpkm.matrix.tsv.gz` | `replitag_nucleation_generate_matrices.sh` |
 | | `data/2024/LAD_data/JG_coding_genes_maxRPKM.tsv` | WT notebook |
 | | `data/2024/MTF2_GSE164804/*.bw` | GEO `GSE164804`, ENCODE `ENCFF587SWK`/`ENCFF065KGU` — *optional*, skipped if `pyBigWig` is absent |
@@ -94,11 +94,9 @@ ships in this repository alone.
 | | `data/2024/RepliTag/Matrices/coverage_scores_gencode...TSS-1000_TES_sorted_bulk.tab` | `RIFs_RepliTag.sh` |
 | | `data/2024/K562_annotations/processed_beds/sorted/gencode.v44.basic.TSS-1000_TES_sorted.bed` | **blocked** |
 | | `data/2024/ENCODE_states/K562_E123_15_coreMarks_domains.bed` | 111epigenomes notebook |
-| | `data/2024/ENCODE_states/K562_IHEC_18_domains.bed` | IHEC download — **needs a URL** |
 | | `.../min350/top95/{K27me3,K27me2,K27me1,K27ac}_K_top95regions.bed` | peakPRINT notebook |
 | | `data/2024/LAD_data/Dataset_S1_Promoter_SuRE_Classification.tsv` | published supplement |
 | | `data/2024/LAD_data/Dataset_S2_TRIP.tsv` | published supplement |
-| | `data/2024/LAD_data/H3K27_TRIP.tsv` | **blocked** |
 | | `data/2024/LAD_data/gencode.v27.annotation.gtf.gz` | GENCODE v27 |
 | | `data/2024/RepliTag/refs/GOBP_CELL_CYCLE.v2025.1.Hs.json` | MSigDB |
 | **bulk_RT** | `data/2024/RepliTag/Matrices/coverage_scores_bulk_10kb.tab` | `RIFs_RepliTag.sh` (10 kb block, currently commented out) |
@@ -142,12 +140,18 @@ submit Slurm jobs; substitute your own scheduler and module system as needed.
 | `replitag_nucleation_generate_matrices.sh` | `data/results/replitag_sphase_nucleation/matrices/encode_coremarks.1000bp.rpkm.matrix.tsv.gz`, `config/samples.tsv` | `filtered_sams_WT_1.0/*_d2pcr_{a,b}.bed`, the hg38 Repli-seq bigWig, `K562_E123_15_coreMarks_domains.bed` |
 | `run_replitag_nucleation_matrices_slurm.sh` | Slurm driver for the above | — |
 
+### Nucleation coverage/correlation
+
+| Script | Produces | Requires |
+|---|---|---|
+| `260728_mtf2_correlation_nucleation_JG.ipynb` | `data/results/mtf2_nucleation/per_bin_covcorr_full.tsv.gz` (section 1) | `encode_coremarks.1000bp.{rpkm,read_count}.matrix.tsv.gz` from `replitag_nucleation_generate_matrices.sh`; `data/2024/MTF2_GSE164804/*.bw` (GEO/ENCODE). Later sections also read `data/2024/RepliTag/bws_bulk/` and `data/2024/JG_Hs_H1_K562_240110/` (both **blocked**) — only section 1 is needed to produce the file. |
+
 ### Differential expression
 
 | Script | Produces | Requires |
 |---|---|---|
-| `251113_DGE_RUVseq.R` | `filtered_sams_WT_1.0/251113_DGE/<mark>/output.tsv` | `..._plusDUP_<mark>.tsv` per-mark tables (**blocked**) and `..._plusDUP.txt.summary.tsv` |
-| `251202_DGE_RUVseq_drug.R` | `data/2024/RepliTag/Matrices/TAZEED/<mark>_drug_RUVr_series.tsv` | `filtered_sams_drug_1.0/`, `data/2024/RepliTag/featureCounts_drug_dm6/...summary` (**blocked**) |
+| `251113_DGE_RUVseq.R` | `filtered_sams_WT_1.0/251113_DGE/<mark>/output.tsv` | `…_plusDUP_<mark>.**tsv**` per-mark tables and `…_plusDUP.txt.summary.**tsv**` — **both blocked**; `filter_sams.sh` writes one combined `.txt` plus featureCounts' own `.txt.summary`, so both the per-mark split *and* the `.txt.summary → .summary.tsv` rename are unproduced |
+| `251202_DGE_RUVseq_drug.R` | `data/2024/RepliTag/Matrices/TAZEED/<mark>_drug_RUVr_series.tsv` | `filtered_sams_drug_1.0/…_plusDUP.**tsv**` and `…_plusDUP.txt.summary.**tsv**` for both the main and `reseq/` branches (**blocked** — `filter_sams_drug*.sh` write `.txt`, not `.tsv`), `data/2024/RepliTag/featureCounts_drug_dm6/...summary` (**blocked**) |
 
 ### Reference preparation
 
@@ -164,7 +168,7 @@ What ships in the repository:
 ```
 data/
 ├── 250214_K27me123ac_P2S25p_TAZEEDUTX_cell_counts.xlsx
-├── 20260206_drug_8only_aurora/           16 Aurora flow-cytometry CSV exports
+├── 20260206_drug_8only_aurora/           15 Aurora flow-cytometry CSV exports
 └── Kc_merged_blacklist_hg38.bed          Drosophila spike-in blacklist (286,386 intervals)
 ```
 
@@ -177,25 +181,27 @@ data/
 │   │   ├── FRIPs.tsv
 │   │   └── FC_out/*_featureCounts_bulk_counts.tsv, *.summary.tsv
 │   ├── ENCODE_chromHMM/{FRIPs.tsv, OverlapEnrichments.tsv}
-│   ├── ENCODE_states/{K562_IHEC_18_domains.bed, K562_E123_15_coreMarks_domains.bed*}
+│   ├── ENCODE_states/K562_E123_15_coreMarks_domains.bed*
 │   ├── K562_annotations/
 │   │   ├── gencode.v44.basic.annotation.gtf
 │   │   └── processed_beds/sorted/gencode.v44.basic.TSS-1000_TES_sorted.{bed,saf}
 │   ├── LAD_data/
 │   │   ├── Dataset_S1_Promoter_SuRE_Classification.tsv
 │   │   ├── Dataset_S2_TRIP.tsv
-│   │   ├── H3K27_TRIP.tsv
 │   │   ├── JG_coding_genes_maxRPKM.tsv*
 │   │   ├── gencode.v27.annotation.gtf.gz
 │   │   └── *.saf
+│   ├── JG_Hs_H1_K562_240110/            (260728_mtf2_correlation… section 4 only)
 │   ├── MTF2_GSE164804/*.bw
+│   ├── RepliSeq/*.bigWig                 UCSC-ENCODE UW Repli-seq K562 **hg19** —
+│   │                                     the INPUT to crossmaphg19tohg38.sh
 │   ├── RepliTag/
 │   │   ├── bws_bulk/*.bw
 │   │   ├── featureCounts_drug_dm6/*.summary
 │   │   ├── filtered_sams_WT_1.0/, filtered_sams_drug_1.0/
 │   │   ├── Matrices/{coverage_scores_*.tab, TAZEED/}
 │   │   ├── refs/GOBP_CELL_CYCLE.v2025.1.Hs.json
-│   │   └── RepliSeq/hg38_bws_crossmap/
+│   │   └── RepliSeq/hg38_bws_crossmap/     (written by crossmaphg19tohg38.sh)
 │   └── SH_all_data/
 │       ├── sections4/, merged_bams4/, merged_bws4/
 │       ├── peakPRINT_50/MERGED_downsampled_bins.tsv
@@ -203,8 +209,10 @@ data/
 │           ├── reproducibility/FRiPs_merged_intervals_rep95.tsv
 │           └── min350/{*.bed, *_meta_v*.tsv, top95/*}
 └── results/
-    ├── mtf2_nucleation/{nuc_cpgonly_spread_bins.tsv.gz, per_bin_covcorr_full.tsv.gz}
-    └── replitag_sphase_nucleation/matrices/encode_coremarks.1000bp.rpkm.matrix.tsv.gz
+    ├── mtf2_nucleation/nuc_cpgonly_spread_bins.tsv.gz
+    │                       (per_bin_covcorr_full.tsv.gz* is written by a notebook)
+    └── replitag_sphase_nucleation/matrices/
+            encode_coremarks.1000bp.{rpkm,read_count}.matrix.tsv.gz
 ```
 
 `*` = written by a notebook in this repository; not required in the archive if you run
@@ -234,7 +242,6 @@ not in this repository.
 **Intermediate tables with no producer.**
 
 - `data/results/mtf2_nucleation/nuc_cpgonly_spread_bins.tsv.gz`
-- `data/results/mtf2_nucleation/per_bin_covcorr_full.tsv.gz`
 - `data/2024/RepliTag/filtered_sams_WT_1.0/hg38.gencodev44_RepliTag_genes-1000_featureCounts_counts_plusDUP_<mark>.tsv`
   (the per-mark split of the combined `filter_sams.sh` table)
 - `data/2024/RepliTag/featureCounts_drug_dm6/genes_v5_KABK_230607_featureCounts_counts_plusDUP.txt.summary`
@@ -243,21 +250,41 @@ not in this repository.
 - `data/2024/SH_all_data/sections4/*.txt` and `All_sams4.txt` (BAM path manifests)
 - `data/2024/ENCODE_chromHMM/{FRIPs,OverlapEnrichments}.tsv` and
   `data/2024/cCREs/intersected_annos/FRIPs.tsv` (ChromHMM `OverlapEnrichment` output)
-- `data/2024/LAD_data/H3K27_TRIP.tsv`
+- `data/2024/RepliTag/filtered_sams_{WT,drug}_1.0/…_plusDUP.**tsv**` and
+  `…_plusDUP.txt.summary.**tsv**` — `filter_sams*.sh` write `…_plusDUP.txt` and
+  featureCounts' own `…_plusDUP.txt.summary`. Both DGE R scripts read `.tsv` versions of
+  each. The `.txt → .tsv` conversion is unproduced on **both** the WT and drug branches.
 - `data/2024/RepliTag/bws_bulk/` — assembled by hand from the `bam2bed2bw.sh` bigWigs plus
   the lifted Repli-seq track; no script does the assembly
+- `data/2024/JG_Hs_H1_K562_240110/` — read by section 4 of
+  `260728_mtf2_correlation_nucleation_JG.ipynb`; not needed to produce
+  `per_bin_covcorr_full.tsv.gz` (section 1)
 
 **External downloads** the cloner must fetch: GENCODE v27 and v44 GTFs; MSigDB
 `GOBP_CELL_CYCLE.v2025.1.Hs.json`; the published supplements `Dataset_S1` and
 `Dataset_S2`; UCSC-ENCODE UW Repli-seq K562 hg19 bigWigs; GEO `GSE164804` (MTF2) and
-ENCODE `ENCFF587SWK` (EZH2) / `ENCFF065KGU` (SUZ12); the IHEC K562 18-state segmentation.
+ENCODE `ENCFF587SWK` (EZH2) / `ENCFF065KGU` (SUZ12).
 
 ---
 
 ## Notes
 
-- `Feature_counts_SAMs-allFeatures_k562.sh` writes to `data/2024/LAD_data/FC_out/`, but
-  `250911_RIFs_FC_pub.ipynb` reads from `data/2024/cCREs/intersected_annos/FC_out/`. The
-  filenames match exactly; the outputs were evidently relocated after the run.
+- **`FC_out` directory mismatch, both scripts.** `Feature_counts_SAMs-allFeatures_k562.sh`
+  writes to `data/2024/LAD_data/FC_out/` and `Feature_counts_SAMs.sh` writes into
+  `data/2024/SH_all_data/`, but `250911_RIFs_FC_pub.ipynb` globs both filename patterns
+  inside `data/2024/cCREs/intersected_annos/FC_out/`. Filenames match exactly, so the
+  links are certain; the outputs were evidently relocated after the run. The expected
+  layout above sides with the notebook — **move both scripts' outputs there**, or repoint
+  the scripts.
+- **`H3K27_TRIP.tsv` is an output, not an input.** `260803_WT…` c063 *writes*
+  `data/2024/LAD_data/H3K27_TRIP.tsv`; nothing reads it. It is not required in the archive.
+- **`K562_IHEC_18_domains.bed` is not required.** Its only occurrence is a commented-out
+  line in `260803_WT…` c017; the live line uses the E123 core-marks file.
+- **Stored notebook outputs still contain 82 lab-internal absolute paths** — 80 in
+  `250411_peakPrint_clean_pub.ipynb` (cells 10/11/12, rendered HTML tables whose cell
+  values are input filenames) and 2 in `251203_drug_timeseries_pub.ipynb` (cell 18,
+  printed save confirmations naming a `setty_m` collaboration share). Source is clean;
+  these are execution *outputs*. Clearing them changes the published record of what was
+  run, so it is left as a deliberate decision rather than done silently.
 - The `processing scripts/` directory name contains a space, so it must be quoted in
   shell commands.
