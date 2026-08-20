@@ -17,7 +17,6 @@ BEDGRAPH_BASENAME=$(basename "$BEDGRAPH_FILE" .bedgraph)
 # Output files
 DOWNSAMPLED_FILE="${BEDGRAPH_BASENAME}_downsampled_bins.bed"
 MERGED_INTERVALS_FILE="${BEDGRAPH_BASENAME}_merged_intervals.bed"
-CUMSUM_TEMP="${BEDGRAPH_BASENAME}_cumsum_temp.bed"
 NORM_CUMSUM_TEMP="${BEDGRAPH_BASENAME}_normcumsum_temp.bed"
 MAPPED_BED="${BEDGRAPH_BASENAME}_mapped.bed"
 
@@ -82,7 +81,7 @@ if [[ -z "$RANK_THRESHOLD" ]]; then
 fi
 
 # Print results
-MAX_RANK=$(awk 'END {print NR}' "$CUMSUM_TEMP")
+MAX_RANK=$(awk 'END {print NR}' "$NORM_CUMSUM_TEMP")
 echo "Rank threshold is $(echo "$RANK_THRESHOLD / $MAX_RANK" | bc -l)"
 
 # Step 5: Output all lines above rank, merge, then remove bins less than min_size
