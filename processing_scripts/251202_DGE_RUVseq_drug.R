@@ -44,7 +44,6 @@ hg38_counts_reseq <- file.path(hg38_data_dir, "reseq/hg38.gencodev44_RepliTag_ge
 # total hg38 reads (from featureCounts summaries) – main + reseq
 hg38_summary_main  <- file.path(hg38_data_dir, "hg38.gencodev44_RepliTag_genes-1000_featureCounts_counts_plusDUP.txt.summary.tsv")
 hg38_summary_reseq <- file.path(hg38_data_dir, "reseq/hg38.gencodev44_RepliTag_genes-1000_featureCounts_counts_plusDUP.txt.summary.tsv")
-#hg38_summary_reseq <- "data/2024/RepliTag/featureCounts_drug_dm6/genes_v5_KABK_230607_featureCounts_counts_plusDUP.txt.summary"
 
 output_dir    <- "data/2024/RepliTag/Matrices/TAZEED"
 dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)

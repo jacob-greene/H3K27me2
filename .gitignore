@@ -2,19 +2,33 @@
 __pycache__/
 *.pyc
 
-# Figure output written by the notebooks (keep the directories, ignore the PDFs)
-figures/**
-!figures/*/
-!figures/**/.gitkeep
+# Figure output written by the notebooks (keep the directory, ignore the PDFs/TSVs).
+# Everything is written flat into figures/ — there are no sub-directories.
+figures/*
+!figures/.gitkeep
 
 # Slurm job logs — several processing scripts `mkdir -p logs` at the repo root
 logs/
 *.log
 
-# Processed data — download from Zenodo (10.5281/zenodo.19489947).
-# The three items below ship with the repository; everything else does not.
+# Processed data — download the rest from Zenodo (10.5281/zenodo.19489947).
+# The items listed below ship with the repository; everything else does not.
 data/**
+
+# This study's own data
 !data/250214_K27me123ac_P2S25p_TAZEEDUTX_cell_counts.xlsx
 !data/Kc_merged_blacklist_hg38.bed
 !data/20260206_drug_8only_aurora/
 !data/20260206_drug_8only_aurora/*.csv
+!data/2024/
+!data/2024/LAD_data/
+!data/2024/LAD_data/JG_coding_genes_maxRPKM.tsv
+
+# hg38 chromosome sizes (UCSC). The processing scripts hardcode a lab-internal copy of
+# this file; see README, "Lab-internal helpers" — repoint them here.
+!data/chr_lens.txt
+
+# Published supplemental tables of the TRIP/SuRE study, redistributed for convenience.
+# Read by 260803_WT_timeseries_clean_chromHMM_pub.ipynb. Cite the original paper.
+!data/2024/LAD_data/Dataset_S1_Promoter_SuRE_Classification.tsv
+!data/2024/LAD_data/Dataset_S2_TRIP.tsv
