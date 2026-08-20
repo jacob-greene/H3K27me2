@@ -9,14 +9,14 @@
 #  GEO -> duplicate-marked SAMs.  PROVIDED FOR CONVENIENCE — NOT RUN, NOT TESTED.
 # ===========================================================================================
 #
-#  This script was written from the methods described in `paper.md` so that someone starting
+#  This script was written from the manuscript Methods so that someone starting
 #  from GEO `GSE327802` can reach the input that `filter_sams.sh` expects. It is NOT the
 #  script the authors ran: the manuscript data were trimmed and aligned by a lab-internal
 #  pipeline that is not part of this repository. **It has never been executed.** Treat it
 #  as a transcription of the published methods into runnable form, and check its output
 #  before trusting anything downstream of it.
 #
-#  Every place where `paper.md` does not determine a parameter is marked
+#  Every place where the manuscript Methods do not determine a parameter is marked
 #  `# AMBIGUOUS (paper):` with the choice made and why. Grep for that string to find them all:
 #
 #      grep -n 'AMBIGUOUS (paper)' processing_scripts/geo_to_sams.sh
@@ -24,8 +24,8 @@
 #  ---------------------------------------------------------------------------------------
 #  PIPELINE
 #      fastq-dump          SRA run -> paired FASTQ
-#      cutadapt 4.4        adapter + NextSeq quality trim   (parameters quoted in paper.md)
-#      bowtie2 2.5.1       -> hg38                          (parameters quoted in paper.md)
+#      cutadapt 4.4        adapter + NextSeq quality trim   (parameters quoted in the manuscript Methods)
+#      bowtie2 2.5.1       -> hg38                          (parameters quoted in the manuscript Methods)
 #      samtools            coordinate-sort + mark duplicates
 #
 #  OUTPUT
@@ -48,13 +48,13 @@
 #         or, with NCBI Entrez Direct installed:
 #             esearch -db sra -query GSE327802 | efetch -format runinfo > runinfo.csv
 #
-#         AMBIGUOUS (paper): the GEO sample titles are not reproduced in paper.md, so the
+#         AMBIGUOUS (paper): the GEO sample titles are not reproduced in the manuscript Methods, so the
 #         mapping from run accession to the <sample> names the rest of this repository uses
 #         (mark, date, cell-cycle fraction, replicate a/b) cannot be derived here. You must
 #         supply it. Getting it wrong silently mislabels every downstream figure.
 #
 #      2. $BT2_INDEX — a bowtie2 index of hg38.
-#         paper.md: "the hg38 human genome reference sequence from UCSC".
+#         The manuscript Methods say: "the hg38 human genome reference sequence from UCSC".
 #         AMBIGUOUS (paper): it does not say whether alt/random/chrUn contigs were included,
 #         nor which UCSC snapshot. The blacklist shipped in this repository
 #         (data/Kc_merged_blacklist_hg38.bed) is on primary `chr*` contigs, and every
@@ -79,7 +79,7 @@ SAMPLE_SHEET="${1:-samples.tsv}"
 OUT_DIR="${OUT_DIR:-data/2024/RepliTag/geo_sams}"
 FASTQ_DIR="${FASTQ_DIR:-data/2024/RepliTag/geo_fastq}"
 BT2_INDEX="${BT2_INDEX:?set BT2_INDEX to the hg38 bowtie2 index prefix}"
-THREADS="${THREADS:-${SLURM_CPUS_PER_TASK:-8}}"   # paper.md quotes cutadapt -j 8
+THREADS="${THREADS:-${SLURM_CPUS_PER_TASK:-8}}"   # the manuscript Methods quote cutadapt -j 8
 KEEP_FASTQ="${KEEP_FASTQ:-0}"                     # 1 = keep the trimmed/raw FASTQs
 
 module load SRA-Toolkit 2>/dev/null || true
@@ -120,7 +120,7 @@ process_one() {
     # -- 1. GEO/SRA -> paired FASTQ ---------------------------------------------------------
     # --split-3 puts a truly-paired run in _1/_2 and any orphan reads in a third file; a run
     # that is not paired therefore produces no _1/_2 and is caught below rather than being
-    # aligned as if it were single-end. paper.md: "Paired-end 50x50 bp".
+    # aligned as if it were single-end. The manuscript Methods say: "Paired-end 50x50 bp".
     local r1="$FASTQ_DIR/${srr}_1.fastq.gz" r2="$FASTQ_DIR/${srr}_2.fastq.gz"
     if [[ ! -s "$r1" || ! -s "$r2" ]]; then
         fastq-dump --split-3 --gzip --outdir "$FASTQ_DIR" "$srr"
@@ -129,7 +129,7 @@ process_one() {
         echo "ERROR: $srr did not yield a paired FASTQ ($r1 / $r2)" >&2; return 1; }
 
     # -- 2. cutadapt ------------------------------------------------------------------------
-    # Verbatim from paper.md: cutadapt 4.4, "-j 8 --nextseq-trim 20 -m 20
+    # Verbatim from the manuscript Methods: cutadapt 4.4, "-j 8 --nextseq-trim 20 -m 20
     #   -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT -Z"
     # -j is taken from $THREADS here so the script respects its Slurm allocation; the paper's
     # value (8) is the default. -Z is cutadapt's fast-compression shorthand and affects only
@@ -142,10 +142,10 @@ process_one() {
         > "logs/${sample}.cutadapt.log"
 
     # -- 3. bowtie2 -------------------------------------------------------------------------
-    # Verbatim from paper.md: Bowtie2 2.5.1, "--very-sensitive-local
+    # Verbatim from the manuscript Methods: Bowtie2 2.5.1, "--very-sensitive-local
     #   --soft-clipped-unmapped-tlen --dovetail --no-mixed --no-discordant -q --phred33
     #   -I 10 -X 1000".
-    # No spike-in genome here on purpose: paper.md removes Drosophila reads AFTER alignment,
+    # No spike-in genome here on purpose: the manuscript Methods remove Drosophila reads AFTER alignment,
     # by blacklisting the hg38 positions that Drosophila profiles map to
     # (data/Kc_merged_blacklist_hg38.bed, applied by filter_sams.sh), not by aligning to a
     # combined index.
@@ -156,7 +156,7 @@ process_one() {
         2> "logs/${sample}.bowtie2.log"
 
     # -- 4. mark duplicates -----------------------------------------------------------------
-    # AMBIGUOUS (paper): paper.md does not mention duplicate handling at all. That duplicates
+    # AMBIGUOUS (paper): the manuscript Methods do not mention duplicate handling at all. That duplicates
     # are MARKED and not removed is inferred from this repository, not from the paper:
     # `filter_sams.sh` consumes SAMs from a directory called `marked/`, its filenames carry a
     # `DTmarked` token, and it runs featureCounts twice — once with `--ignoreDup` and once
