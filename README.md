@@ -26,7 +26,13 @@ cd H3K27me2
 
 **Every path in this repository is relative to the repository root.** Start Jupyter from
 the repository root, and run the shell/R scripts from the repository root
-(`bash "processing scripts/RIFs_RepliTag.sh"`). Nothing needs to be edited if you do.
+(`bash "processing scripts/RIFs_RepliTag.sh"`).
+
+> **One exception, and it currently blocks five notebooks.** Cell 2 of
+> `250411_peakPrint_clean_pub.ipynb`, `250911_RIFs_FC_pub.ipynb`,
+> `251203_drug_timeseries_pub.ipynb`, `260803_WT_timeseries_clean_chromHMM_pub.ipynb`
+> and `bulk_RT_pub.ipynb` does `sys.path.append(os.path.expanduser("~"))` and then
+> `import color_palettes`. That module is **not in this repository** — see Known gaps.
 
 ---
 
@@ -144,7 +150,7 @@ submit Slurm jobs; substitute your own scheduler and module system as needed.
 
 | Script | Produces | Requires |
 |---|---|---|
-| `260728_mtf2_correlation_nucleation_JG.ipynb` | `data/results/mtf2_nucleation/per_bin_covcorr_full.tsv.gz` (section 1) | `encode_coremarks.1000bp.{rpkm,read_count}.matrix.tsv.gz` from `replitag_nucleation_generate_matrices.sh`; `data/2024/MTF2_GSE164804/*.bw` (GEO/ENCODE). Later sections also read `data/2024/RepliTag/bws_bulk/` and `data/2024/JG_Hs_H1_K562_240110/` (both **blocked**) — only section 1 is needed to produce the file. |
+| `260728_mtf2_correlation_nucleation_JG.ipynb` | `data/results/mtf2_nucleation/per_bin_covcorr_full.tsv.gz` (section 1) | **Section 1 cannot run on a clean clone.** It reads `data/2024/RepliTag/bws_bulk/K27me3_K_no_chrM.1-1000.bw` (**blocked**, no producer), plus `encode_coremarks.1000bp.{rpkm,read_count}.matrix.tsv.gz` from `replitag_nucleation_generate_matrices.sh`, `data/2024/MTF2_GSE164804/{MTF2_shCT_hg38_coverage.bw, ENCODE_SUZ12_…ENCFF065KGU…bw, ENCODE_EZH2_…ENCFF587SWK…bw, MTF2_macs3_hg38_peaks.bed}`, `data/2024/K562_annotations/EncodeRegDnaseUwK562Peak.bed` and `.../processed_beds/hg38_CpG_Island.bed`. So `per_bin_covcorr_full.tsv.gz` **must ship in the archive** — having a producer and being producible are different things. Later sections additionally read `data/2024/JG_Hs_H1_K562_240110/`, `encode_coremarks_repliseq.tsv.gz` and `per_bin_input_mtf2mean0.tsv.gz` (all **blocked**). |
 
 ### Differential expression
 
@@ -184,6 +190,8 @@ data/
 │   ├── ENCODE_states/K562_E123_15_coreMarks_domains.bed*
 │   ├── K562_annotations/
 │   │   ├── gencode.v44.basic.annotation.gtf
+│   │   ├── EncodeRegDnaseUwK562Peak.bed
+│   │   ├── processed_beds/hg38_CpG_Island.bed
 │   │   └── processed_beds/sorted/gencode.v44.basic.TSS-1000_TES_sorted.{bed,saf}
 │   ├── LAD_data/
 │   │   ├── Dataset_S1_Promoter_SuRE_Classification.tsv
@@ -192,7 +200,11 @@ data/
 │   │   ├── gencode.v27.annotation.gtf.gz
 │   │   └── *.saf
 │   ├── JG_Hs_H1_K562_240110/            (260728_mtf2_correlation… section 4 only)
-│   ├── MTF2_GSE164804/*.bw
+│   │                                    **blocked** — no producer
+│   ├── MTF2_GSE164804/
+│   │   ├── *.bw                        MTF2_shCT + ENCFF587SWK/ENCFF065KGU fold-change
+│   │   ├── MTF2_macs3_hg38_peaks.bed   MACS3 peak calls — **blocked**, no producing script
+│   │   └── ENCODE_{EZH2_K562_ENCFF080JPV,SUZ12_K562_ENCFF856HYC}_hg38.bed.gz
 │   ├── RepliSeq/*.bigWig                 UCSC-ENCODE UW Repli-seq K562 **hg19** —
 │   │                                     the INPUT to crossmaphg19tohg38.sh
 │   ├── RepliTag/
@@ -209,8 +221,7 @@ data/
 │           ├── reproducibility/FRiPs_merged_intervals_rep95.tsv
 │           └── min350/{*.bed, *_meta_v*.tsv, top95/*}
 └── results/
-    ├── mtf2_nucleation/nuc_cpgonly_spread_bins.tsv.gz
-    │                       (per_bin_covcorr_full.tsv.gz* is written by a notebook)
+    ├── mtf2_nucleation/{nuc_cpgonly_spread_bins.tsv.gz, per_bin_covcorr_full.tsv.gz}
     └── replitag_sphase_nucleation/matrices/
             encode_coremarks.1000bp.{rpkm,read_count}.matrix.tsv.gz
 ```
@@ -239,6 +250,15 @@ No trimming or alignment script is included. The parameters are given in `paper.
 `data/2024/LAD_data/*.saf` files are derived from GENCODE, but the derivation script is
 not in this repository.
 
+**`color_palettes.py` — a hard blocker, and the first thing a cloner will hit.**
+Five of the eight notebooks import it at cell 2 from the user's home directory
+(`sys.path.append(os.path.expanduser("~"))`). The module is not in this repository and
+is not obtainable publicly, so those notebooks stop with `ModuleNotFoundError` at their
+second cell — including `250411_peakPrint_clean_pub.ipynb`, which is **second in the
+mandatory run order** and produces the `top95regions.bed` files two other notebooks need.
+It defines the manuscript's figure colours, so it cannot be substituted without silently
+changing published figures. It needs to be shipped with the repository.
+
 **Intermediate tables with no producer.**
 
 - `data/results/mtf2_nucleation/nuc_cpgonly_spread_bins.tsv.gz`
@@ -257,13 +277,24 @@ not in this repository.
 - `data/2024/RepliTag/bws_bulk/` — assembled by hand from the `bam2bed2bw.sh` bigWigs plus
   the lifted Repli-seq track; no script does the assembly
 - `data/2024/JG_Hs_H1_K562_240110/` — read by section 4 of
-  `260728_mtf2_correlation_nucleation_JG.ipynb`; not needed to produce
-  `per_bin_covcorr_full.tsv.gz` (section 1)
+  `260728_mtf2_correlation_nucleation_JG.ipynb`
+- `data/results/mtf2_nucleation/encode_coremarks_repliseq.tsv.gz` and
+  `per_bin_input_mtf2mean0.tsv.gz` — read by that notebook's later sections, written
+  nowhere in the corpus
+- `data/results/mtf2_nucleation/per_bin_coverage_correlation.tsv.gz` — the optional
+  coverage cache its section 1 reads if present; no producer, so the expensive bigWig
+  path always runs
+- `data/2024/MTF2_GSE164804/MTF2_macs3_hg38_peaks.bed` — MACS3 peak calls; no producing
+  script, and not covered by the GEO/ENCODE bigWig downloads
+- `data/2024/K562_annotations/EncodeRegDnaseUwK562Peak.bed` and
+  `processed_beds/hg38_CpG_Island.bed`
 
 **External downloads** the cloner must fetch: GENCODE v27 and v44 GTFs; MSigDB
 `GOBP_CELL_CYCLE.v2025.1.Hs.json`; the published supplements `Dataset_S1` and
 `Dataset_S2`; UCSC-ENCODE UW Repli-seq K562 hg19 bigWigs; GEO `GSE164804` (MTF2) and
-ENCODE `ENCFF587SWK` (EZH2) / `ENCFF065KGU` (SUZ12).
+ENCODE `ENCFF587SWK` (EZH2) / `ENCFF065KGU` (SUZ12) fold-change bigWigs, and
+`ENCFF080JPV` (EZH2) / `ENCFF856HYC` (SUZ12) hg38 peak BEDs for the merged
+`260728_mtf2_correlation_nucleation_JG.ipynb`.
 
 ---
 
@@ -286,5 +317,23 @@ ENCODE `ENCFF587SWK` (EZH2) / `ENCFF065KGU` (SUZ12).
   printed save confirmations naming a `setty_m` collaboration share). Source is clean;
   these are execution *outputs*. Clearing them changes the published record of what was
   run, so it is left as a deliberate decision rather than done silently.
+- **Two undefined names remain in `260803_WT_timeseries_clean_chromHMM_pub.ipynb`** and
+  need an author decision, so they are left as-is rather than guessed at:
+  `per_gene_max_me2_cats` (c040, used at L56 and L81 — c040's own header comment lists it
+  under "Assumes these already exist", and the other three names in that list *are*
+  defined) and `gl_df` (c053 L1). Neither is assigned anywhere in the repository. Both
+  look like leftovers from cells dropped when the `_clean_pub` derivative was cut: either
+  the defining cells should be restored, or the panels deleted. A related break in
+  `250411_peakPrint_clean_pub.ipynb` (`ScalarMappable`/`Normalize` used unqualified at
+  c026/c027/c029/c030) *was* fixed, since the missing imports were unambiguous.
+- `260803_WT…` c074 writes `RNAPII_cellCycle_0.0001.csv` — a data product — into
+  `figures/Fig1/`, following this project's convention of writing figure-source tables
+  beside the figures. Nothing reads it, so the location is cosmetic.
+- `processing scripts/260728_mtf2_correlation_nucleation_JG.ipynb` was copied
+  byte-identical and then re-serialized with `ensure_ascii=False`, so a line-level `diff`
+  against the lab-internal original shows many changed lines (unicode escapes became
+  literal UTF-8 in the markdown cells) on top of the four intended path repoints. Only
+  the four `source` edits are semantic: outputs, execution counts, cell ids, cell types
+  and all metadata are unchanged.
 - The `processing scripts/` directory name contains a space, so it must be quoted in
   shell commands.
