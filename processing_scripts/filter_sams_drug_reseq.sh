@@ -13,8 +13,10 @@ module load parallel
 # Set paths
 export BLACKLIST="data/Kc_merged_blacklist_hg38.bed"
 export OUT_DIR="data/2024/RepliTag/filtered_sams_drug_1.0/reseq"
-export INPUT_DIR1="/shared/ngs/illumina/henikoff/250915_bowtie2/JG_HsDm/marked/sams/"
-export INPUT_DIR2="/shared/ngs/illumina/henikoff/250910_bowtie2/JG_HsDm/marked/sams/"
+# The drug series was sequenced twice; both runs are filtered into the same OUT_DIR.
+# Run geo_to_sams.sh once per run with OUT_DIR set to each of these, or override them.
+export INPUT_DIR1="${INPUT_DIR1:-data/2024/RepliTag/geo_sams_drug_reseq1}"
+export INPUT_DIR2="${INPUT_DIR2:-data/2024/RepliTag/geo_sams_drug_reseq2}"
 
 export saf_file="data/2024/K562_annotations/processed_beds/sorted/gencode.v44.basic.TSS-1000_TES_sorted.saf"
 
@@ -64,3 +66,13 @@ $sam_files
 featureCounts -T $SLURM_CPUS_PER_TASK -p --countReadPairs -B -d 1 -D 1000 --primary -O -F SAF -a "$saf_file" \
 -o "$OUT_DIR/hg38.gencodev44_RepliTag_genes-1000_featureCounts_counts_plusDUP.txt" \
 $sam_files
+
+# Reshape featureCounts' output into what 251202_DGE_RUVseq_drug.R reads.
+#
+# featureCounts writes a leading '#' comment line and calls its own summary
+# '<counts>.txt.summary'. The R script reads a '.tsv' with no comment line (it strips the
+# SAM paths off the column names itself) plus the summary as '.txt.summary.tsv'.
+counts_txt="$OUT_DIR/hg38.gencodev44_RepliTag_genes-1000_featureCounts_counts_plusDUP.txt"
+
+awk 'BEGIN{FS=OFS="\t"} !/^#/{print}' "$counts_txt" > "${counts_txt%.txt}.tsv"
+mv "$counts_txt.summary" "$counts_txt.summary.tsv"

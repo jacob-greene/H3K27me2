@@ -12,8 +12,7 @@
 #  This script was written from the methods described in `paper.md` so that someone starting
 #  from GEO `GSE327802` can reach the input that `filter_sams.sh` expects. It is NOT the
 #  script the authors ran: the manuscript data were trimmed and aligned by a lab-internal
-#  pipeline whose output landed in `/shared/ngs/illumina/henikoff/*_bowtie2/JG_HsDm/marked/`,
-#  and that pipeline is not part of this repository. **It has never been executed.** Treat it
+#  pipeline that is not part of this repository. **It has never been executed.** Treat it
 #  as a transcription of the published methods into runnable form, and check its output
 #  before trusting anything downstream of it.
 #

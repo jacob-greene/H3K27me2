@@ -11,7 +11,7 @@ set -euo pipefail
 module load Subread/2.0.3-GCC-11.2.0
 
 # --- Config ---
-export outdir="data/2024/LAD_data/FC_out"
+export outdir="data/2024/cCREs/intersected_annos/FC_out"
 export sections_dir="data/2024/SH_all_data/sections4"
 
 # Directory containing all SAFs you want to run

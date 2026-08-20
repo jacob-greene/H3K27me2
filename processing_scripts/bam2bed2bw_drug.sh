@@ -10,7 +10,7 @@ mkdir -p "$bw_files_dir" "$bw_files_dir/scripts" logs
 
 # Genome parameters
 export scale=3210038034  # hg38 genome size
-export flens="/shared/ngs/illumina/henikoff/databases/human/hg38/chr_lens.txt"
+export flens="data/chr_lens.txt"
 export min_len=1
 export max_len=1000
 
@@ -80,8 +80,8 @@ sort -k1,1 -k2,2n -k3,3n "$tmp_cat" > "$merged_bed"
 rm -f "$tmp_cat"
 
 # Make normalized BigWig
-/shared/ngs/illumina/henikoff/bin/aligners/fraction_norm.csh "$merged_bed" $scale bw $flens $min_len $max_len
-# /shared/ngs/illumina/henikoff/bin/aligners/fraction_norm.csh "$merged_bed" $scale bg $flens $min_len $max_len
+processing_scripts/fraction_norm.csh "$merged_bed" $scale bw $flens $min_len $max_len
+# processing_scripts/fraction_norm.csh "$merged_bed" $scale bg $flens $min_len $max_len
 EOF
 
     # Submit SLURM job

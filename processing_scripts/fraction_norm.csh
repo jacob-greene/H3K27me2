@@ -17,7 +17,6 @@
 #bedtools bam2bed -bedpe
 
 unalias rm
-set sbin = /shared/ngs/illumina/henikoff/bin
 
 #echo $#argv
 if ($#argv < 6) then

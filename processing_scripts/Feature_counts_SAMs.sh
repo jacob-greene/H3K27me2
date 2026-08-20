@@ -10,7 +10,8 @@
 module load Subread/2.0.3-GCC-11.2.0
 
 # Set output directory and GTF file path
-export outdir="data/2024/SH_all_data"
+export outdir="data/2024/cCREs/intersected_annos/FC_out"
+mkdir -p "$outdir"
 export gtf_file="data/2024/K562_annotations/gencode.v44.basic.annotation.gtf"
 export sections_dir="data/2024/SH_all_data/sections4"
 export saf_file="data/2024/K562_annotations/processed_beds/sorted/gencode.v44.basic.TSS-1000_TES_sorted.saf"

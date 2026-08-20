@@ -20,7 +20,7 @@ scale=3298912062
 min_len=1
 max_len=1000
 PEAKscript="processing scripts/bedtools_fingerprint_slope3.sh"
-CHRM_SIZES="/shared/ngs/illumina/henikoff/databases/human/hg38/chr_lens.txt"
+CHRM_SIZES="data/chr_lens.txt"
 basename=$(basename "$inputBed" .bed)
 
 # Calculate number of lines to sample based on percentage
