@@ -110,10 +110,10 @@ data/
 │   │   ├── FRIPs.tsv
 │   │   └── FC_out/*_featureCounts_bulk_counts.tsv, *.summary.tsv
 │   ├── ENCODE_chromHMM/{FRIPs.tsv, OverlapEnrichments.tsv}
-│   ├── ENCODE_states/K562_E123_15_coreMarks_domains.bed*
+│   ├── ENCODE_states/K562_E123_15_coreMarks_domains.bed
 │   ├── K562_annotations/
 │   │   ├── gencode.v44.basic.annotation.coding.gtf
-│   │   └── processed_beds/sorted/gencode.v44.basic.TSS-1000_TES_sorted.{bed,saf}†
+│   │   └── processed_beds/sorted/gencode.v44.basic.TSS-1000_TES_sorted.{bed,saf}
 │   ├── LAD_data/
 │   │   ├── gencode.v27.annotation.gtf.gz
 │   │   └── *.saf
@@ -133,22 +133,10 @@ data/
 │           ├── reproducibility/FRiPs_merged_intervals_rep95.tsv
 │           └── min350/{*.bed, *_meta_v*.tsv, top95/*}
 └── results/
-    ├── mtf2_nucleation/{nuc_cpgonly_spread_bins.tsv.gz, per_bin_covcorr_full.tsv.gz‡}
+    ├── mtf2_nucleation/{nuc_cpgonly_spread_bins.tsv.gz, per_bin_covcorr_full.tsv.gz}
     └── replitag_sphase_nucleation/matrices/
             encode_coremarks.1000bp.{rpkm,read_count}.matrix.tsv.gz
 ```
-
-`*` = written by `K27me3_states_111epigenomes_pub.ipynb`, which reads only Roadmap
-Epigenomics S3 URLs and so has no blocked input. It is the one file here you can produce
-from a bare clone, and it is not needed in the archive if you run the notebooks in order.
-
-`†` = producible by `gtf2bed_TSS.sh` from the GENCODE v44 GTF, given `gtftools`.
-
-`‡` = producible by `build_per_bin_covcorr.py`, but only once the rpkm matrix beside it is
-in place.
-
-`260803_WT_timeseries_clean_chromHMM_pub.ipynb` also *writes*
-`data/2024/LAD_data/H3K27_TRIP.tsv`, which nothing reads; it is not required in the archive.
 
 **External downloads** the cloner must fetch: GENCODE v27 and v44 GTFs; MSigDB
 `GOBP_CELL_CYCLE.v2025.1.Hs.json`; UCSC-ENCODE UW Repli-seq K562 hg19 bigWigs; GEO
@@ -164,6 +152,4 @@ duplicate-marked bowtie2 SAMs, which the authors produced with a lab-internal pi
 is not in this repository. `geo_to_sams.sh` can help process fastqs into sam files; the raw reads are in GEO `GSE327802`.
 
 ---
-
-
 
