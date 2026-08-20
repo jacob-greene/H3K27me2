@@ -1,0 +1,16 @@
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+
+# Figure output written by the notebooks (keep the directories, ignore the PDFs)
+figures/**
+!figures/*/
+!figures/**/.gitkeep
+
+# Processed data — download from Zenodo (10.5281/zenodo.19489947).
+# The three items below ship with the repository; everything else does not.
+data/**
+!data/250214_K27me123ac_P2S25p_TAZEEDUTX_cell_counts.xlsx
+!data/Kc_merged_blacklist_hg38.bed
+!data/20260206_drug_8only_aurora/
+!data/20260206_drug_8only_aurora/*.csv
