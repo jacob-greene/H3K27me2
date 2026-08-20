@@ -62,7 +62,7 @@ fi
 
 # Step 2: Run Python script
 module load Python/3.9.6-GCCcore-11.2.0
-rank_script="processing scripts/compute_rank_threshold.py"
+rank_script="processing_scripts/compute_rank_threshold.py"
 python3 "$rank_script" "$MAPPED_BED" "$NORM_CUMSUM_TEMP"
 
 # Check if Python script produced output

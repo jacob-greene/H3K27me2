@@ -5,7 +5,7 @@ PROJECT="."
 OUT="$PROJECT/data/results/replitag_sphase_nucleation"
 LOG_DIR="$OUT/logs"
 TASKS="$OUT/config/matrix_tasks.tsv"
-GENERATOR="$PROJECT/processing scripts/replitag_nucleation_generate_matrices.sh"
+GENERATOR="$PROJECT/processing_scripts/replitag_nucleation_generate_matrices.sh"
 TILE_SIZES="${TILE_SIZES:-1000}"
 export TILE_SIZES
 

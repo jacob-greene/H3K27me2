@@ -19,7 +19,7 @@ MIN_SIZE=300
 scale=3298912062
 min_len=1
 max_len=1000
-PEAKscript="processing scripts/bedtools_fingerprint_slope3.sh"
+PEAKscript="processing_scripts/bedtools_fingerprint_slope3.sh"
 CHRM_SIZES="data/chr_lens.txt"
 basename=$(basename "$inputBed" .bed)
 
@@ -50,7 +50,7 @@ echo "bedgraph ${currentPct} complete."
 BEDGRAPH_BASENAME=$(basename "$bedGraphFile" .bedgraph)
 PEAKoutput="${BEDGRAPH_BASENAME}_merged_intervals.bed"
 
-bash $PEAKscript $bedGraphFile $GENOME $CHRM_SIZES $BINWIDTH $MIN_SIZE
+bash "$PEAKscript" "$bedGraphFile" "$GENOME" "$CHRM_SIZES" "$BINWIDTH" "$MIN_SIZE"
 
 echo "peakPRINT ${currentPct} complete."
 echo "$PEAKoutput"
