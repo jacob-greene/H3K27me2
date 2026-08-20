@@ -24,8 +24,7 @@ data/**
 !data/2024/LAD_data/
 !data/2024/LAD_data/JG_coding_genes_maxRPKM.tsv
 
-# hg38 chromosome sizes (UCSC). The processing scripts hardcode a lab-internal copy of
-# this file; see README, "Lab-internal helpers" — repoint them here.
+# hg38 chromosome sizes (UCSC). bam2bed2bw*.sh and downsample_peakPRINT.sh read this copy.
 !data/chr_lens.txt
 
 # Published supplemental tables of the TRIP/SuRE study, redistributed for convenience.
