@@ -1,0 +1,28 @@
+# Environment for the 8 publication notebooks.
+#   conda env create -f envs/notebooks.yml && conda activate h3k27me2-notebooks
+# Versions are deliberately unpinned except for python: the notebooks use stable APIs and
+# pinning the whole stack helps nobody reproduce a figure.
+name: h3k27me2-notebooks
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.11
+  - jupyterlab
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - statsmodels
+  - tabulate
+  - openpyxl      # 250214_* reads data/250214_*.xlsx via pandas.read_excel
+  - pyranges      # 250911_*, 251203_*, 260803_*, bulk_RT_*
+  - pybigwig      # 260801_*
+  - pybedtools    # K27me3_states_*
+  - bedtools      # K27me3_states_* shells out to it; or set BEDTOOLS_BIN
+  - requests      # K27me3_states_* downloads Roadmap segmentations at run time
+  - tqdm          # K27me3_states_*
+  - gseapy        # 260803_*
+  - pillow        # 260801_*

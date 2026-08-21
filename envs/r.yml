@@ -1,0 +1,18 @@
+# Environment for the two differential-expression scripts:
+#   processing_scripts/251113_DGE_RUVseq.R      (WT time series)
+#   processing_scripts/251202_DGE_RUVseq_drug.R (drug treatment)
+#   conda env create -f envs/r.yml && conda activate h3k27me2-r
+name: h3k27me2-r
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base>=4.3
+  - bioconductor-edger
+  - bioconductor-limma
+  - bioconductor-ruvseq
+  - r-dplyr
+  - r-readr
+  - r-tibble
+  - r-stringr
+  - r-jsonlite

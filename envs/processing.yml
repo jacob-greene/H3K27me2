@@ -1,0 +1,28 @@
+# Environment for processing_scripts/ (everything except the two R scripts).
+#   conda env create -f envs/processing.yml && conda activate h3k27me2-processing
+#
+# Only the two tools whose versions the manuscript Methods actually name are pinned.
+#
+# NOT AVAILABLE HERE: `gtftools`, required by gtf2bed_TSS.sh, is not on conda-forge or
+# bioconda. Install it separately from https://www.genemine.org/gtftools.php. That stage
+# is the only one this file cannot cover.
+name: h3k27me2-processing
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.9
+  - numpy                   # compute_rank_threshold.py
+  - pandas                  # build_per_bin_covcorr.py
+  - pybigwig                # build_per_bin_covcorr.py
+  - bedtools
+  - samtools
+  - bowtie2=2.5.1           # manuscript Methods
+  - cutadapt=4.4            # manuscript Methods
+  - subread                 # featureCounts
+  - deeptools               # multiBigwigSummary, computeMatrix, plotHeatmap
+  - ucsc-bedgraphtobigwig
+  - crossmap                # crossmaphg19tohg38.sh
+  - sra-tools               # fastq-dump, geo_to_sams.sh
+  - parallel                # filter_sams*.sh
+  - tcsh                    # fraction_norm.csh is #!/bin/csh
