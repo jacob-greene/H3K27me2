@@ -7,10 +7,13 @@
 #     DRY_RUN=1 bash processing_scripts/run.sh <stage>   # print, don't execute
 #
 # Each stage just invokes the underlying script(s) with the repo-root-relative paths they
-# already expect. This driver adds no analysis of its own and reorders nothing.
+# already expect. This driver adds no analysis of its own.
 #
-# Stages are listed in pipeline order, but most need the Zenodo archive unpacked into
-# data/ first (see README). `selftest` is the exception: it needs no external data.
+# Stages are listed in dependency order: download first, then process. Running them in the
+# listed order satisfies every intra-repo dependency — in particular `annotation` writes
+# the SAF that `filter` and `counts` both read, and `repliseq` writes the lifted bigWig
+# that `nucleation` reads. Most stages also need the Zenodo archive unpacked into data/
+# first (see README); `selftest` and `fetch` are the exceptions.
 
 set -uo pipefail
 
@@ -19,11 +22,12 @@ usage() {
 usage: bash processing_scripts/run.sh <stage>
 
   selftest    peakPRINT chain on synthetic data — no external data needed
+  fetch       fetch_external_data.sh  download the public third-party inputs   [DO THIS FIRST]
   align       geo_to_sams.sh          GEO/SRA -> duplicate-marked SAMs   [NEVER RUN BY THE AUTHORS]
-  filter      filter_sams*.sh         apply the Drosophila spike-in blacklist
+  annotation  gtf2bed_TSS.sh          GENCODE v44 GTF -> TSS-1000..TES BED + SAF   [needs gtftools]
+  filter      filter_sams*.sh         apply the Drosophila spike-in blacklist, count over the SAF
   merge       merge_sams2bam_slurm.sh split All_sams4.txt into sections, merge BAMs
   tracks      bam2bed2bw*.sh          filtered SAMs -> normalised bigWigs
-  annotation  gtf2bed_TSS.sh          GENCODE v44 GTF -> TSS-1000..TES BED + SAF   [needs gtftools]
   counts      Feature_counts_SAMs*.sh featureCounts over the SAF(s)
   dge         *_DGE_RUVseq*.R         RUVSeq/edgeR differential expression
   peakprint   downsample_peakPRINT.sh <inputBed> <pct> <tmpdir> <outdir>
@@ -31,7 +35,11 @@ usage: bash processing_scripts/run.sh <stage>
   rifs        RIFs_RepliTag.sh        reads-in-features matrices
   repliseq    crossmaphg19tohg38.sh   UW Repli-seq hg19 bigWigs -> hg38
   nucleation  run_replitag_nucleation_matrices_slurm.sh, then build_per_bin_covcorr.py
-  blacklist   blacklist_dm6.sh        rebuild the spike-in blacklist   [LAB-INTERNAL INPUTS]
+
+  blacklist   blacklist_dm6.sh        rebuild the spike-in blacklist   [OUT OF BAND]
+              Upstream of `filter`, but listed apart from the pipeline on purpose: its
+              output data/Kc_merged_blacklist_hg38.bed already ships here, and its four
+              inputs are lab-internal, so a sequential run must skip it.
 
 DRY_RUN=1 prints the commands instead of running them.
 EOF
@@ -94,10 +102,18 @@ case "$stage" in
     echo "selftest OK: $npeaks peaks called through processing_scripts/ -> processing_scripts/" >&2
     exit 0 ;;
 
+  fetch)
+    # No stage argument: with none, fetch_external_data.sh prints its own usage.
+    run bash processing_scripts/fetch_external_data.sh "${@:-all}" ;;
+
   align)
     echo "NOTE: geo_to_sams.sh was transcribed from the manuscript Methods and has never" >&2
     echo "      been executed by the authors. Set BT2_INDEX and pass a sample sheet." >&2
     run bash processing_scripts/geo_to_sams.sh "$@" ;;
+
+  # Before `filter`: filter_sams*.sh and Feature_counts_SAMs*.sh both count over the SAF
+  # this stage writes.
+  annotation) run bash processing_scripts/gtf2bed_TSS.sh ;;
 
   filter)
     run bash processing_scripts/filter_sams.sh
@@ -109,8 +125,6 @@ case "$stage" in
   tracks)
     run bash processing_scripts/bam2bed2bw.sh
     run bash processing_scripts/bam2bed2bw_drug.sh ;;
-
-  annotation) run bash processing_scripts/gtf2bed_TSS.sh ;;
 
   counts)
     run bash processing_scripts/Feature_counts_SAMs.sh
