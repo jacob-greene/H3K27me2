@@ -178,3 +178,7 @@ data/
     └── replitag_sphase_nucleation/matrices/
             encode_coremarks.1000bp.{rpkm,read_count}.matrix.tsv.gz
 ```
+
+## Licence
+
+MIT — see [`LICENSE`](LICENSE). The two redistributed supplement files keep their own terms; see [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
