@@ -179,7 +179,7 @@ data/
             encode_coremarks.1000bp.{rpkm,read_count}.matrix.tsv.gz
 ```
 
-## Licence
+## License
 
 The code and documentation in this repository are MIT licensed; see [`LICENSE`](LICENSE).
 That grant covers this repository's own work only. It does not cover the two redistributed
