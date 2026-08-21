@@ -181,4 +181,7 @@ data/
 
 ## Licence
 
-MIT — see [`LICENSE`](LICENSE). The two redistributed supplement files keep their own terms; see [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+The code and documentation in this repository are MIT licensed; see [`LICENSE`](LICENSE).
+That grant covers this repository's own work only. It does not cover the two redistributed
+supplement files under `data/2024/LAD_data/`, which keep the terms recorded in
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
