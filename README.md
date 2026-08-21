@@ -48,6 +48,10 @@ Only `bowtie2` and `cutadapt` are pinned, to the versions the manuscript Methods
 One dependency is not installable from conda: **`gtftools`**, needed by the `annotation`
 stage, comes from <https://www.genemine.org/gtftools.php>.
 
+On an Lmod cluster the scripts load a module only when the tool is not already on `PATH`,
+so an activated environment takes precedence and its versions — not the modules' — are
+what actually run.
+
 Figures and figure-source tables are written **flat into `figures/`**. There are no
 sub-directories, and no two cells write the same filename.
 

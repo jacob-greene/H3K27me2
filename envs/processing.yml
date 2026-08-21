@@ -23,6 +23,7 @@ dependencies:
   - deeptools               # multiBigwigSummary, computeMatrix, plotHeatmap
   - ucsc-bedgraphtobigwig
   - crossmap                # crossmaphg19tohg38.sh
+  - wget                    # chain-file download in crossmaphg19tohg38.sh
   - sra-tools               # fastq-dump, geo_to_sams.sh
   - parallel                # filter_sams*.sh
   - tcsh                    # fraction_norm.csh is #!/bin/csh
