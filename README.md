@@ -21,6 +21,8 @@ catalyzed in cycling cells"* by Greene, Ahmad, and Henikoff, 2026.
 git clone https://github.com/jacob-greene/H3K27me2.git
 cd H3K27me2
 
+conda env create -f envs/notebooks.yml && conda activate h3k27me2-notebooks
+
 # Two notebooks run immediately, with no download at all:
 jupyter lab K27me3_states_111epigenomes_pub.ipynb       # fetches its own data over HTTPS
 jupyter lab 250214_growth_viability_cellcycle_pub.ipynb # reads only data/ as shipped
@@ -31,8 +33,20 @@ jupyter lab 250214_growth_viability_cellcycle_pub.ipynb # reads only data/ as sh
 ```
 
 **Every path in this repo is relative to the repository root.** Start Jupyter from
-the repository root, and run the shell/R scripts from the repository root
-(`bash processing_scripts/RIFs_RepliTag.sh`).
+the repository root, and run the processing scripts from the repository root
+(`bash processing_scripts/run.sh <stage>`).
+
+### Environments
+
+| File | Covers |
+|---|---|
+| `envs/notebooks.yml` | the 8 publication notebooks |
+| `envs/processing.yml` | `processing_scripts/`, except the two R scripts |
+| `envs/r.yml` | `251113_DGE_RUVseq.R`, `251202_DGE_RUVseq_drug.R` |
+
+Only `bowtie2` and `cutadapt` are pinned, to the versions the manuscript Methods name.
+One dependency is not installable from conda: **`gtftools`**, needed by the `annotation`
+stage, comes from <https://www.genemine.org/gtftools.php>.
 
 Figures and figure-source tables are written **flat into `figures/`**. There are no
 sub-directories, and no two cells write the same filename.
@@ -44,7 +58,8 @@ sub-directories, and no two cells write the same filename.
 ```
 H3K27me2/
 ├── *_pub.ipynb              8 publication notebooks (the figures)
-├── processing_scripts/      23 scripts that build the processed data
+├── processing_scripts/      24 scripts that build the processed data; run.sh drives them
+├── envs/                    conda environment files
 ├── data/                    input data — a few files ship here, the rest from Zenodo
 ├── figures/                 created by the notebooks; PDFs and figure-source TSVs land here
 └── THIRD_PARTY_NOTICES.md   licence terms for the two redistributed supplement files
@@ -98,6 +113,30 @@ Then, in any order: `250214_growth_viability_cellcycle_pub.ipynb`,
 `250911_RIFs_FC_pub.ipynb`, `251203_drug_timeseries_pub.ipynb`,
 `260801_nucleation_pub.ipynb`, `260803_WT_timeseries_clean_chromHMM_pub.ipynb`,
 `bulk_RT_pub.ipynb`.
+
+---
+
+## Processing scripts
+
+`processing_scripts/run.sh` drives them. Run it from the repository root:
+
+```bash
+conda env create -f envs/processing.yml && conda activate h3k27me2-processing
+
+bash processing_scripts/run.sh list        # the stages, in pipeline order
+bash processing_scripts/run.sh selftest    # ~1 min, needs no Zenodo data
+bash processing_scripts/run.sh <stage>     # DRY_RUN=1 prints without running
+```
+
+`selftest` calls peaks on synthetic fragments; it exists to check that a clone is wired up
+before you spend hours on real data. Every other stage needs the Zenodo archive unpacked
+into `data/` first, and three carry caveats that `run.sh` repeats when you invoke them:
+`align` was transcribed from the Methods and **has never been executed by the authors**;
+`blacklist` reads four lab-internal files and its output already ships; `annotation` needs
+`gtftools` (see Environments). The `dge` stage uses `envs/r.yml` instead.
+
+`nucleation` submits a Slurm array and returns; run
+`python3 processing_scripts/build_per_bin_covcorr.py` once those jobs finish.
 
 ---
 
