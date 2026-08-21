@@ -26,3 +26,4 @@ dependencies:
   - sra-tools               # fastq-dump, geo_to_sams.sh
   - parallel                # filter_sams*.sh
   - tcsh                    # fraction_norm.csh is #!/bin/csh
+  - bc                      # scale factors and the rank threshold in the peakPRINT chain

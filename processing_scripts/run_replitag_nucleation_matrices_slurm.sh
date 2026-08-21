@@ -13,8 +13,8 @@ cd "$PROJECT"
 mkdir -p "$LOG_DIR"
 
 source /app/lmod/lmod/init/profile
-module load BEDTools/2.31.0-GCC-12.3.0
-module load deepTools/3.5.4.post1-gfbf-2022b
+command -v bedtools >/dev/null || module load BEDTools/2.31.0-GCC-12.3.0
+command -v computeMatrix >/dev/null || module load deepTools/3.5.4.post1-gfbf-2022b
 
 bash "$GENERATOR" prepare
 
@@ -42,8 +42,8 @@ cat > "$array_script" <<SBATCH
 set -euo pipefail
 export TILE_SIZES="$TILE_SIZES"
 source /app/lmod/lmod/init/profile
-module load BEDTools/2.31.0-GCC-12.3.0
-module load deepTools/3.5.4.post1-gfbf-2022b
+command -v bedtools >/dev/null || module load BEDTools/2.31.0-GCC-12.3.0
+command -v computeMatrix >/dev/null || module load deepTools/3.5.4.post1-gfbf-2022b
 cd "$PROJECT"
 bash "$GENERATOR" coverage "\${SLURM_ARRAY_TASK_ID}"
 SBATCH
@@ -62,8 +62,8 @@ cat > "$collate_script" <<SBATCH
 set -euo pipefail
 export TILE_SIZES="$TILE_SIZES"
 source /app/lmod/lmod/init/profile
-module load BEDTools/2.31.0-GCC-12.3.0
-module load deepTools/3.5.4.post1-gfbf-2022b
+command -v bedtools >/dev/null || module load BEDTools/2.31.0-GCC-12.3.0
+command -v computeMatrix >/dev/null || module load deepTools/3.5.4.post1-gfbf-2022b
 cd "$PROJECT"
 bash "$GENERATOR" collate
 SBATCH

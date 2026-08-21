@@ -6,9 +6,9 @@
 #SBATCH --output=logs/filter_blacklist_%j.log
 
 # Load required modules
-module load SAMtools/1.19.2-GCC-13.2.0
-module load BEDTools/2.30.0-GCC-12.2.0
-module load parallel
+command -v samtools >/dev/null || module load SAMtools/1.19.2-GCC-13.2.0
+command -v bedtools >/dev/null || module load BEDTools/2.30.0-GCC-12.2.0
+command -v parallel >/dev/null || module load parallel
 
 # Set paths
 export BLACKLIST="data/Kc_merged_blacklist_hg38.bed"
@@ -50,7 +50,7 @@ find "$INPUT_DIR2" -name "*.sam" | \
   parallel --bar -j $SLURM_CPUS_PER_TASK filter_sam {}
 
 # Count reads in genes using featureCounts
-module load Subread/2.0.3-GCC-11.2.0
+command -v featureCounts >/dev/null || module load Subread/2.0.3-GCC-11.2.0
 
 # Generate list of SAM files
 sam_files=$(ls "$OUT_DIR"/*.sam 2>/dev/null)

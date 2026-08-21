@@ -12,7 +12,7 @@ export fig_dir="figures/"
 export mat_dir="data/2024/SH_all_data/deeptools_mats"
 mkdir -p $mat_dir
 
-module load deepTools/3.5.4.post1-gfbf-2022b
+command -v computeMatrix >/dev/null || module load deepTools/3.5.4.post1-gfbf-2022b
 
 # run compute matrix to collect the data needed for plotting
 computeMatrix reference-point -S $bw_dir/K27me3_K.1-1000.bw $bw_dir/K27me2_K.1-1000.bw $bw_dir/K27me1_K.1-1000.bw $bw_dir/K27ac_K.1-1000.bw $bw_dir/P2_K.1-1000.bw \

@@ -19,7 +19,7 @@ peakdir="data/2024/SH_all_data/transitions"
 mkdir -p logs $outdir
 
 
-module load deepTools/3.5.4.post1-gfbf-2022b
+command -v computeMatrix >/dev/null || module load deepTools/3.5.4.post1-gfbf-2022b
 
 # for bed in "$peakdir"/*K_regions.bed; do
 #     base_name=$(basename "$bed" .txt)

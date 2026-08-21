@@ -20,7 +20,7 @@ MERGED_INTERVALS_FILE="${BEDGRAPH_BASENAME}_merged_intervals.bed"
 NORM_CUMSUM_TEMP="${BEDGRAPH_BASENAME}_normcumsum_temp.bed"
 MAPPED_BED="${BEDGRAPH_BASENAME}_mapped.bed"
 
-module load BEDTools/2.30.0-GCC-11.2.0
+command -v bedtools >/dev/null || module load BEDTools/2.30.0-GCC-11.2.0
 
 # Set LC_COLLATE for sorting
 export LC_COLLATE=C
@@ -60,7 +60,10 @@ if [[ ! -s "$MAPPED_BED" ]]; then
 fi
 
 # Step 2: Run Python script
-module load Python/3.9.6-GCCcore-11.2.0
+# Only fall back to the Lmod Python if the active interpreter cannot run the rank script.
+# Loading it unconditionally would prepend it ahead of an activated conda environment
+# (envs/processing.yml), and the Lmod Python/3.9.6 has no numpy.
+python3 -c 'import numpy' 2>/dev/null || module load Python/3.9.6-GCCcore-11.2.0
 rank_script="processing_scripts/compute_rank_threshold.py"
 python3 "$rank_script" "$MAPPED_BED" "$NORM_CUMSUM_TEMP"
 

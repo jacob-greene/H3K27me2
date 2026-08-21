@@ -16,7 +16,7 @@ Kc3=/shared/ngs/illumina/henikoff/211210_bowtie2/BT_Dm/hg38/BT_Dm_BT419_H29.bed
 Kc4=/shared/ngs/illumina/henikoff/211210_bowtie2/BT_Dm/hg38/BT_Dm_BT420_H29.bed
 OUT=data
 mkdir -p "$OUT"
-module load BEDTools/2.31.0-GCC-12.3.0
+command -v bedtools >/dev/null || module load BEDTools/2.31.0-GCC-12.3.0
 
 # Clean, combine, sort, and merge
 cat "$Kc1" "$Kc2" "$Kc3" "$Kc4" | \

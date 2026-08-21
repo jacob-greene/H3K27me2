@@ -61,8 +61,18 @@ case "$stage" in
     # compute_rank_threshold.py, i.e. every intra-repo script-to-script reference, using
     # synthetic fragments and a two-chromosome sizes file so it finishes in ~1 minute.
     # It runs in a scratch directory so the repository stays clean.
-    command -v bedtools >/dev/null || { echo "ERROR: bedtools not on PATH (envs/processing.yml)" >&2; exit 1; }
-    python3 -c 'import numpy' 2>/dev/null || { echo "ERROR: python3 needs numpy (envs/processing.yml)" >&2; exit 1; }
+    if [[ "${DRY_RUN:-0}" == "1" ]]; then
+        echo "+ bash processing_scripts/downsample_peakPRINT.sh selftest.bed 100 tmpd outd" >&2
+        exit 0
+    fi
+    for t in bedtools bc; do
+        command -v "$t" >/dev/null || { echo "ERROR: $t not on PATH (envs/processing.yml)" >&2; exit 1; }
+    done
+    # Check the interpreter the PIPELINE will use, not this one: bedtools_fingerprint_slope3.sh
+    # falls back to an Lmod Python when the active one has no numpy.
+    python3 -c 'import numpy' 2>/dev/null \
+        || { echo "ERROR: python3 has no numpy (envs/processing.yml); the pipeline would" >&2
+             echo "       fall back to an Lmod Python that also lacks it." >&2; exit 1; }
     work="$(mktemp -d)"; trap 'rm -rf "$work"' EXIT
     ln -s "$PWD/processing_scripts" "$work/processing_scripts"
     mkdir -p "$work/data" "$work/tmpd/selftest" "$work/outd"

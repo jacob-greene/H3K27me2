@@ -7,7 +7,7 @@
 #SBATCH --output=logs/feature_counts_%j.log   # Standard output and error log
 
 # Load required module
-module load Subread/2.0.3-GCC-11.2.0
+command -v featureCounts >/dev/null || module load Subread/2.0.3-GCC-11.2.0
 
 # Set output directory and GTF file path
 export outdir="data/2024/cCREs/intersected_annos/FC_out"

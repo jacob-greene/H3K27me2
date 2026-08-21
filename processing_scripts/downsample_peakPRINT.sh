@@ -10,7 +10,7 @@ tmpdir=$3
 outputDir=$4
 
 # Load required modules or software environments
-module load BEDTools/2.30.0-GCC-11.2.0
+command -v bedtools >/dev/null || module load BEDTools/2.30.0-GCC-11.2.0
 
 # Define additional variables
 GENOME=hg38

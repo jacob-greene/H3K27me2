@@ -63,7 +63,8 @@
 #
 #  DEPENDENCIES
 #      sra-tools (fastq-dump), cutadapt 4.4, bowtie2 2.5.1, samtools
-#      The `module load` lines below are Fred Hutch Lmod names; substitute your own.
+#      The `module load` lines below are Fred Hutch Lmod names and are skipped when the
+#      tool is already on PATH, so an activated envs/processing.yml environment wins.
 #
 #  USAGE
 #      # one Slurm task per sample sheet line
@@ -82,10 +83,10 @@ BT2_INDEX="${BT2_INDEX:?set BT2_INDEX to the hg38 bowtie2 index prefix}"
 THREADS="${THREADS:-${SLURM_CPUS_PER_TASK:-8}}"   # the manuscript Methods quote cutadapt -j 8
 KEEP_FASTQ="${KEEP_FASTQ:-0}"                     # 1 = keep the trimmed/raw FASTQs
 
-module load SRA-Toolkit 2>/dev/null || true
-module load cutadapt 2>/dev/null || true
-module load Bowtie2 2>/dev/null || true
-module load SAMtools 2>/dev/null || true
+command -v fastq-dump >/dev/null || module load SRA-Toolkit 2>/dev/null || true
+command -v cutadapt >/dev/null || module load cutadapt 2>/dev/null || true
+command -v bowtie2 >/dev/null || module load Bowtie2 2>/dev/null || true
+command -v samtools >/dev/null || module load SAMtools 2>/dev/null || true
 
 for tool in fastq-dump cutadapt bowtie2 samtools; do
     command -v "$tool" >/dev/null || { echo "ERROR: $tool not on PATH" >&2; exit 1; }

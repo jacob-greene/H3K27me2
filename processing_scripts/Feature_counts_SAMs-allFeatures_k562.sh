@@ -8,7 +8,7 @@
 
 set -euo pipefail
 
-module load Subread/2.0.3-GCC-11.2.0
+command -v featureCounts >/dev/null || module load Subread/2.0.3-GCC-11.2.0
 
 # --- Config ---
 export outdir="data/2024/cCREs/intersected_annos/FC_out"
