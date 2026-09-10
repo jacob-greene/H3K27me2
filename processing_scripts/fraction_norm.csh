@@ -27,7 +27,7 @@ if ($#argv < 6) then
 	echo "min_len and max_len refer to the lengths of fragments in genome.bed to normalize"
 	echo "To normalize all fragments use min_len = 1 and max_len = 1000"
 	echo "Output will be placed in the current directory"
-	echo "This script should be run on the gizmo system using sbatch"
+	echo "This script should be submitted to a Slurm cluster with sbatch"
 	exit(-1)
 endif
 
@@ -94,4 +94,3 @@ echo "Output is in file $output in the current directory"
 
 rm $$.*
 exit
-track type=bedGraph name=SB_ScDm_Sth_H2A_0713 description="SB_ScDm_Sth_H2A_0713 yeast fly_spiked"
