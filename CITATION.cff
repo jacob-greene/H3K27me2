@@ -14,11 +14,15 @@ abstract: >-
   environments both need. Raw sequencing data are in GEO under GSE327802.
   Processed data are on Zenodo under 10.5281/zenodo.19489947.
 authors:
+  # The CFF 1.2.0 schema allows one affiliation string per author, so authors
+  # with two affiliations on the manuscript carry both here, separated by "; ".
   - family-names: Greene
     given-names: Jacob E.
     orcid: https://orcid.org/0000-0002-3016-7296
     affiliation: >-
-      Basic Sciences Division, Fred Hutchinson Cancer Center, Seattle, WA, USA
+      Basic Sciences Division, Fred Hutchinson Cancer Center, Seattle, WA, USA;
+      Molecular Medicine and Mechanisms of Disease PhD Program, University of
+      Washington, Seattle, WA, USA
   - family-names: Ahmad
     given-names: Kami
     orcid: https://orcid.org/0000-0001-8572-6182
@@ -28,7 +32,8 @@ authors:
     given-names: Steven
     orcid: https://orcid.org/0000-0002-7621-8685
     affiliation: >-
-      Basic Sciences Division, Fred Hutchinson Cancer Center, Seattle, WA, USA
+      Basic Sciences Division, Fred Hutchinson Cancer Center, Seattle, WA, USA;
+      Howard Hughes Medical Institute, Chevy Chase, MD, USA
 repository-code: https://github.com/jacob-greene/H3K27me2
 license: MIT
 keywords:
