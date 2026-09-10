@@ -4,6 +4,7 @@
 
 Analysis code for the manuscript *"Histone H3K27 methylation states are sequentially
 catalyzed in cycling cells"* by Greene, Ahmad, and Henikoff, 2026.
+[![DOI](https://zenodo.org/badge/1206419559.svg)](https://doi.org/10.5281/zenodo.22696735)
 
 ## Data availability
 
