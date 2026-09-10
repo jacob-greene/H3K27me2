@@ -1,0 +1,48 @@
+{
+  "upload_type": "software",
+  "title": "H3K27me2: analysis code for \"Histone H3K27 methylation states are sequentially catalyzed in cycling cells\"",
+  "description": "<p>Analysis code for the manuscript &quot;Histone H3K27 methylation states are sequentially catalyzed in cycling cells&quot; by Greene, Ahmad and Henikoff.</p><p>The repository holds the eight publication notebooks that produce the figures, the processing scripts that build the processed data from CUT&amp;Tag sequencing reads, and the conda environments both need.</p><p>Related deposits: raw sequencing data are in GEO under <a href=\"https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE327802\">GSE327802</a>; processed data are on Zenodo under <a href=\"https://doi.org/10.5281/zenodo.19489947\">10.5281/zenodo.19489947</a>.</p><p>The MIT license covers this repository's own work only. It does not cover the two redistributed supplement files under <code>data/2024/LAD_data/</code>, which keep the terms recorded in <code>THIRD_PARTY_NOTICES.md</code>.</p>",
+  "access_right": "open",
+  "license": "mit",
+  "creators": [
+    {
+      "name": "Greene, Jacob E.",
+      "affiliation": "Basic Sciences Division, Fred Hutchinson Cancer Center, Seattle, WA, USA",
+      "orcid": "0000-0002-3016-7296"
+    },
+    {
+      "name": "Ahmad, Kami",
+      "affiliation": "Basic Sciences Division, Fred Hutchinson Cancer Center, Seattle, WA, USA",
+      "orcid": "0000-0001-8572-6182"
+    },
+    {
+      "name": "Henikoff, Steven",
+      "affiliation": "Basic Sciences Division, Fred Hutchinson Cancer Center, Seattle, WA, USA",
+      "orcid": "0000-0002-7621-8685"
+    }
+  ],
+  "keywords": [
+    "H3K27 methylation",
+    "Polycomb",
+    "chromatin",
+    "CUT&Tag",
+    "histone modification",
+    "DNA replication",
+    "epigenetics",
+    "K562"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.64898/2026.04.30.721988",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-preprint",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.19489947",
+      "relation": "references",
+      "resource_type": "dataset",
+      "scheme": "doi"
+    }
+  ]
+}
