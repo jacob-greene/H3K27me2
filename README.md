@@ -1,4 +1,4 @@
-# H3K27me2
+# H3K27 methylation states are sequentially catalyzed in cycling cells
 
 ![H3K27 methylation states are sequentially catalyzed in cycling cells](Fig1.png)
 
