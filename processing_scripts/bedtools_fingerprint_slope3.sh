@@ -62,7 +62,7 @@ fi
 # Step 2: Run Python script
 # Only fall back to the Lmod Python if the active interpreter cannot run the rank script.
 # Loading it unconditionally would prepend it ahead of an activated conda environment
-# (envs/processing.yml), and the Lmod Python/3.9.6 has no numpy.
+# (environment.yml), and the Lmod Python/3.9.6 has no numpy.
 python3 -c 'import numpy' 2>/dev/null || module load Python/3.9.6-GCCcore-11.2.0
 rank_script="processing_scripts/compute_rank_threshold.py"
 python3 "$rank_script" "$MAPPED_BED" "$NORM_CUMSUM_TEMP"

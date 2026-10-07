@@ -50,13 +50,13 @@ DRY_RUN=1 prints the URLs instead of downloading. FORCE=1 re-downloads existing 
 EOF
 }
 
-# curl and wget are both fine; envs/processing.yml ships wget, most systems have curl.
+# curl and wget are both fine; environment.yml ships wget, most systems have curl.
 if command -v curl >/dev/null; then
     get() { curl -fsSL --retry 3 -o "$1" "$2"; }
 elif command -v wget >/dev/null; then
     get() { wget -q -O "$1" "$2"; }
 else
-    echo "ERROR: neither curl nor wget on PATH (envs/processing.yml ships wget)." >&2; exit 1
+    echo "ERROR: neither curl nor wget on PATH (environment.yml ships wget)." >&2; exit 1
 fi
 
 # Download $2 to $1 unless it is already there. Downloads to a .part file first, so an

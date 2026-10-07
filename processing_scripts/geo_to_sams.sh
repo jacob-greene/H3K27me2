@@ -64,7 +64,7 @@
 #  DEPENDENCIES
 #      sra-tools (fastq-dump), cutadapt 4.4, bowtie2 2.5.1, samtools
 #      The `module load` lines below are Fred Hutch Lmod names and are skipped when the
-#      tool is already on PATH, so an activated envs/processing.yml environment wins.
+#      tool is already on PATH, so an activated environment.yml environment wins.
 #
 #  USAGE
 #      # one Slurm task per sample sheet line
