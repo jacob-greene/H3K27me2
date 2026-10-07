@@ -1,0 +1,62 @@
+# One environment for everything in this repository: the notebooks, the processing
+# scripts and the two R differential-expression scripts.
+#
+#     conda env create -f environment.yml      # or: mamba / micromamba create -f ...
+#     conda activate h3k27me2
+#
+# Pinned: the two tools whose versions the manuscript Methods name (bowtie2, cutadapt),
+# and the core analysis libraries, at the versions the published notebooks ran with.
+# cutadapt 4.4 is built for Python <= 3.10, which sets the Python version.
+name: h3k27me2
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.10
+
+  # notebooks/
+  - jupyterlab
+  - nbconvert               # run a notebook headless: jupyter nbconvert --execute
+  - numpy=1.26.4
+  - pandas=2.2.3
+  - scipy=1.15.2
+  - matplotlib              # deeptools holds this at 3.9; the notebooks ran on 3.10
+  - seaborn=0.13.2
+  - scikit-learn
+  - statsmodels=0.14
+  - tabulate
+  - openpyxl                # pandas.read_excel
+  - pyranges=0.1.4
+  - pybigwig
+  - pybedtools
+  - requests                # K27me3_states_* downloads Roadmap segmentations
+  - tqdm
+  - gseapy=1.1.8            # 1.3 rejects organism='Human'
+  - pillow
+
+  # processing_scripts/
+  - bedtools
+  - samtools
+  - bowtie2=2.5.1           # manuscript Methods
+  - cutadapt=4.4            # manuscript Methods
+  - subread                 # featureCounts
+  - deeptools               # multiBigwigSummary, computeMatrix, plotHeatmap
+  - ucsc-bedgraphtobigwig
+  - crossmap                # hg19 -> hg38 liftover
+  - gtftools                # GENCODE GTF -> TSS/TES BED
+  - sra-tools               # fastq-dump
+  - parallel
+  - tcsh                    # fraction_norm.csh
+  - bc
+  - wget
+
+  # processing_scripts/*_DGE_RUVseq*.R
+  - r-base>=4.3
+  - bioconductor-edger
+  - bioconductor-limma
+  - bioconductor-ruvseq
+  - r-dplyr
+  - r-readr
+  - r-tibble
+  - r-stringr
+  - r-jsonlite

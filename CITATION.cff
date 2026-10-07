@@ -1,0 +1,70 @@
+cff-version: 1.2.0
+message: >-
+  If you use this analysis code, please cite the manuscript it accompanies.
+  Cite this repository as well if you reuse the code itself.
+title: >-
+  H3K27me2: analysis code for "Histone H3K27 methylation states are
+  sequentially catalyzed in cycling cells"
+type: software
+abstract: >-
+  Analysis code for the manuscript "Histone H3K27 methylation states are
+  sequentially catalyzed in cycling cells". The repository holds the eight
+  publication notebooks that produce the figures, the processing scripts that
+  build the processed data from CUT&Tag sequencing reads, and the conda
+  environment both need. Raw sequencing data are in GEO under GSE327802.
+  Processed data are on Zenodo under 10.5281/zenodo.19489947.
+authors:
+  # The CFF 1.2.0 schema allows one affiliation string per author, so authors
+  # with two affiliations on the manuscript carry both here, separated by "; ".
+  - family-names: Greene
+    given-names: Jacob E.
+    orcid: https://orcid.org/0000-0002-3016-7296
+    affiliation: >-
+      Basic Sciences Division, Fred Hutchinson Cancer Center, Seattle, WA, USA;
+      Molecular Medicine and Mechanisms of Disease PhD Program, University of
+      Washington, Seattle, WA, USA
+  - family-names: Ahmad
+    given-names: Kami
+    orcid: https://orcid.org/0000-0001-8572-6182
+    affiliation: >-
+      Basic Sciences Division, Fred Hutchinson Cancer Center, Seattle, WA, USA
+  - family-names: Henikoff
+    given-names: Steven
+    orcid: https://orcid.org/0000-0002-7621-8685
+    affiliation: >-
+      Basic Sciences Division, Fred Hutchinson Cancer Center, Seattle, WA, USA;
+      Howard Hughes Medical Institute, Chevy Chase, MD, USA
+repository-code: https://github.com/jacob-greene/H3K27me2
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22696735
+    description: Zenodo concept DOI for this repository (all versions)
+license: MIT
+keywords:
+  - H3K27 methylation
+  - Polycomb
+  - chromatin
+  - CUT&Tag
+  - histone modification
+  - DNA replication
+  - epigenetics
+  - K562
+preferred-citation:
+  type: article
+  title: >-
+    Histone H3K27 methylation states are sequentially catalyzed in cycling
+    cells
+  authors:
+    - family-names: Greene
+      given-names: Jacob E.
+      orcid: https://orcid.org/0000-0002-3016-7296
+    - family-names: Ahmad
+      given-names: Kami
+      orcid: https://orcid.org/0000-0001-8572-6182
+    - family-names: Henikoff
+      given-names: Steven
+      orcid: https://orcid.org/0000-0002-7621-8685
+  doi: 10.64898/2026.04.30.721988
+  journal: bioRxiv
+  year: 2026
+  month: 5

@@ -1,6 +1,7 @@
 # Builds data/Kc_merged_blacklist_hg38.bed, the Drosophila spike-in blacklist. That output
 # ALREADY SHIPS in this repository, so you do not need to run this — which is just as well,
-# because its four inputs are lab-internal and are not redistributed here.
+# because its four inputs are lab-internal and are not redistributed here. Pass them as
+# arguments.
 #
 # KNOWN DISCREPANCY: which Drosophila cell line the spike-in came from.
 # The manuscript Methods say "hg38 positions mapped to by reads from S2 profiles were
@@ -10,10 +11,17 @@
 # named in the manuscript may not be the one these profiles came from. The shipped
 # blacklist is the authoritative artefact; the naming is unreconciled.
 
-Kc1=/shared/ngs/illumina/henikoff/241106_bowtie2/JG_HsDm/JG_HsDm_K562_K27ac_241101_Kc_d2pcr.bed
-Kc2=/shared/ngs/illumina/henikoff/250605_bowtie2/BT_Dm/hg38/BT_Dm_3836.bed
-Kc3=/shared/ngs/illumina/henikoff/211210_bowtie2/BT_Dm/hg38/BT_Dm_BT419_H29.bed
-Kc4=/shared/ngs/illumina/henikoff/211210_bowtie2/BT_Dm/hg38/BT_Dm_BT420_H29.bed
+# Usage (from the repository root):
+#     bash processing_scripts/blacklist_dm6.sh <dm1.bed> <dm2.bed> <dm3.bed> <dm4.bed>
+# Each input is a BED of hg38 positions hit by reads from a Drosophila-only CUT&Tag
+# profile (one Kc167 profile and three BT_Dm profiles in the original build).
+[[ $# -eq 4 ]] || {
+    echo "usage: bash processing_scripts/blacklist_dm6.sh <dm1.bed> <dm2.bed> <dm3.bed> <dm4.bed>" >&2
+    exit 2; }
+Kc1=$1
+Kc2=$2
+Kc3=$3
+Kc4=$4
 OUT=data
 mkdir -p "$OUT"
 command -v bedtools >/dev/null || module load BEDTools/2.31.0-GCC-12.3.0

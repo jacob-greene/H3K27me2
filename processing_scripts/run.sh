@@ -12,8 +12,7 @@
 # Stages are listed in dependency order: download first, then process. Running them in the
 # listed order satisfies every intra-repo dependency — in particular `annotation` writes
 # the SAF that `filter` and `counts` both read, and `repliseq` writes the lifted bigWig
-# that `nucleation` reads. Most stages also need the Zenodo archive unpacked into data/
-# first (see README); `selftest` and `fetch` are the exceptions.
+# that `nucleation` reads. Run `fetch` first; see processing_scripts/README.md.
 
 set -uo pipefail
 
@@ -22,9 +21,9 @@ usage() {
 usage: bash processing_scripts/run.sh <stage>
 
   selftest    peakPRINT chain on synthetic data — no external data needed
-  fetch       fetch_external_data.sh  download the public third-party inputs   [DO THIS FIRST]
+  fetch       fetch_external_data.sh  download Zenodo processed data + public references [DO THIS FIRST]
   align       geo_to_sams.sh          GEO/SRA -> duplicate-marked SAMs   [NEVER RUN BY THE AUTHORS]
-  annotation  gtf2bed_TSS.sh          GENCODE v44 GTF -> TSS-1000..TES BED + SAF   [needs gtftools]
+  annotation  gtf2bed_TSS.sh          GENCODE v44 GTF -> TSS-1000..TES BED + SAF
   filter      filter_sams*.sh         apply the Drosophila spike-in blacklist, count over the SAF
   merge       merge_sams2bam_slurm.sh split All_sams4.txt into sections, merge BAMs
   tracks      bam2bed2bw*.sh          filtered SAMs -> normalised bigWigs
@@ -74,12 +73,12 @@ case "$stage" in
         exit 0
     fi
     for t in bedtools bc; do
-        command -v "$t" >/dev/null || { echo "ERROR: $t not on PATH (envs/processing.yml)" >&2; exit 1; }
+        command -v "$t" >/dev/null || { echo "ERROR: $t not on PATH (environment.yml)" >&2; exit 1; }
     done
     # Check the interpreter the PIPELINE will use, not this one: bedtools_fingerprint_slope3.sh
     # falls back to an Lmod Python when the active one has no numpy.
     python3 -c 'import numpy' 2>/dev/null \
-        || { echo "ERROR: python3 has no numpy (envs/processing.yml); the pipeline would" >&2
+        || { echo "ERROR: python3 has no numpy (environment.yml); the pipeline would" >&2
              echo "       fall back to an Lmod Python that also lacks it." >&2; exit 1; }
     work="$(mktemp -d)"; trap 'rm -rf "$work"' EXIT
     ln -s "$PWD/processing_scripts" "$work/processing_scripts"
@@ -154,7 +153,7 @@ case "$stage" in
   blacklist)
     echo "NOTE: blacklist_dm6.sh reads four lab-internal files that are not redistributed." >&2
     echo "      Its output, data/Kc_merged_blacklist_hg38.bed, already ships in this repo." >&2
-    run bash processing_scripts/blacklist_dm6.sh ;;
+    run bash processing_scripts/blacklist_dm6.sh "$@" ;;
 
   *) echo "unknown stage: $stage" >&2; usage; exit 2 ;;
 esac
