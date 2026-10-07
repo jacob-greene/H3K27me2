@@ -11,7 +11,7 @@ abstract: >-
   sequentially catalyzed in cycling cells". The repository holds the eight
   publication notebooks that produce the figures, the processing scripts that
   build the processed data from CUT&Tag sequencing reads, and the conda
-  environments both need. Raw sequencing data are in GEO under GSE327802.
+  environment both need. Raw sequencing data are in GEO under GSE327802.
   Processed data are on Zenodo under 10.5281/zenodo.19489947.
 authors:
   # The CFF 1.2.0 schema allows one affiliation string per author, so authors
@@ -35,6 +35,10 @@ authors:
       Basic Sciences Division, Fred Hutchinson Cancer Center, Seattle, WA, USA;
       Howard Hughes Medical Institute, Chevy Chase, MD, USA
 repository-code: https://github.com/jacob-greene/H3K27me2
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22696735
+    description: Zenodo concept DOI for this repository (all versions)
 license: MIT
 keywords:
   - H3K27 methylation

@@ -12,8 +12,7 @@
 # Stages are listed in dependency order: download first, then process. Running them in the
 # listed order satisfies every intra-repo dependency — in particular `annotation` writes
 # the SAF that `filter` and `counts` both read, and `repliseq` writes the lifted bigWig
-# that `nucleation` reads. Most stages also need the Zenodo archive unpacked into data/
-# first (see README); `selftest` and `fetch` are the exceptions.
+# that `nucleation` reads. Run `fetch` first; see processing_scripts/README.md.
 
 set -uo pipefail
 
@@ -22,7 +21,7 @@ usage() {
 usage: bash processing_scripts/run.sh <stage>
 
   selftest    peakPRINT chain on synthetic data — no external data needed
-  fetch       fetch_external_data.sh  download the public third-party inputs   [DO THIS FIRST]
+  fetch       fetch_external_data.sh  download Zenodo processed data + public references [DO THIS FIRST]
   align       geo_to_sams.sh          GEO/SRA -> duplicate-marked SAMs   [NEVER RUN BY THE AUTHORS]
   annotation  gtf2bed_TSS.sh          GENCODE v44 GTF -> TSS-1000..TES BED + SAF
   filter      filter_sams*.sh         apply the Drosophila spike-in blacklist, count over the SAF

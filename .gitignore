@@ -11,9 +11,12 @@ figures/*
 logs/
 *.log
 
-# Processed data — download the rest from Zenodo (10.5281/zenodo.19489947).
+# Data — `processing_scripts/run.sh fetch` downloads the public inputs (see data/README.md).
 # The items listed below ship with the repository; everything else does not.
 data/**
+
+# What lives where in data/
+!data/README.md
 
 # This study's own data
 !data/250214_K27me123ac_P2S25p_TAZEEDUTX_cell_counts.xlsx
