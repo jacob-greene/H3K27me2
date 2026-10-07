@@ -7,6 +7,9 @@ __pycache__/
 figures/*
 !figures/.gitkeep
 
+# gseapy Enrichr output written by 260803_WT_timeseries_clean_chromHMM_pub.ipynb
+enrichr_results/
+
 # Slurm job logs — several processing scripts `mkdir -p logs` at the repo root
 logs/
 *.log

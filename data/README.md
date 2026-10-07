@@ -57,9 +57,18 @@ data/
 │       ├── peakPRINT_50/MERGED_downsampled_bins.tsv         (no script)
 │       └── downsample_peakPRINT_slope1_min300/
 │           └── min350/{*.bed, *_meta_v*.tsv}                (peakprint; the meta tables: no script)
-│               └── top95/*_top95regions.bed                 (fetch from Zenodo, or 250411_peakPrint_clean_pub)
+│               └── top95/*_top95regions.bed                 (fetch from Zenodo; see the note below)
 └── results/
     ├── mtf2_nucleation/per_bin_covcorr_full.tsv.gz          (nucleation)
     ├── mtf2_nucleation/nuc_cpgonly_spread_bins.tsv.gz       (no script)
     └── replitag_sphase_nucleation/matrices/*.matrix.tsv.gz  (nucleation)
 ```
+
+### Note on `top95/*_top95regions.bed`
+
+`250411_peakPrint_clean_pub.ipynb` writes all fifteen `{mark}_{cell}_top95regions.bed`
+files, but as published it reads only `K27me3_K_peak_coverage.bed`. It therefore
+regenerates `K27me3_K_top95regions.bed` (identical to the Zenodo copy) and writes the other
+fourteen files empty. `Peak_heatmaps_v2.sh` needs the five `*_K_*` files, so after running
+that notebook, run `bash processing_scripts/run.sh fetch zenodo` again: it re-downloads any
+empty file and checks every checksum.
