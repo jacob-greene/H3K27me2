@@ -109,12 +109,13 @@ do_gencode44() {
     fetch data/2024/K562_annotations/gencode.v44.basic.annotation.gtf.gz \
           "$GENCODE"_44/gencode.v44.basic.annotation.gtf.gz
     if [[ "${DRY_RUN:-0}" == "1" ]]; then return 0; fi
-    # gtf2bed_TSS.sh wants the protein-coding subset. Keep the headers and every line
-    # belonging to a protein-coding gene; gtftools strips the "chr" prefix itself and
-    # gtf2bed_TSS.sh adds it back, so leave the GENCODE naming alone.
+    # gtf2bed_TSS.sh wants the protein-coding subset: every line belonging to a
+    # protein-coding gene, without the "##" header lines. This reproduces the original
+    # file byte for byte. gtftools strips the "chr" prefix itself and gtf2bed_TSS.sh
+    # adds it back, so leave the GENCODE naming alone.
     echo "  filtering to protein-coding genes -> $out" >&2
     gzip -dc data/2024/K562_annotations/gencode.v44.basic.annotation.gtf.gz \
-      | awk '/^#/ || /gene_type "protein_coding"/' > "$out.part"
+      | awk '!/^#/ && /gene_type "protein_coding"/' > "$out.part"
     mv "$out.part" "$out"
 }
 
