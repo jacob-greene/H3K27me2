@@ -36,7 +36,7 @@ the S-phase fractions, for Polycomb-domain genes ordered by replication timing.<
 
 ## Quick start
 
-Needs [conda](https://conda-forge.org/download/) (or mamba / micromamba) and about 4 GB of
+Needs [conda](https://conda-forge.org/download/) (or mamba / micromamba) and about 7 GB of
 disk for the environment.
 
 ```bash
