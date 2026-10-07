@@ -36,8 +36,9 @@ the S-phase fractions, for Polycomb-domain genes ordered by replication timing.<
 
 ## Quick start
 
-Needs [conda](https://conda-forge.org/download/) (or mamba / micromamba) and about 7 GB of
-disk for the environment.
+Needs [conda](https://conda-forge.org/download/) (or mamba / micromamba). The environment
+takes about 7 GB of disk, plus about 3 GB of package cache during the build, and the build
+can take 30–40 minutes.
 
 ```bash
 git clone https://github.com/jacob-greene/H3K27me2.git
@@ -45,8 +46,9 @@ cd H3K27me2
 conda env create -f environment.yml
 conda activate h3k27me2
 
-# Reproduce the growth, viability and cell-cycle panels (about 1 minute).
-jupyter nbconvert --to notebook --execute --inplace \
+# Reproduce the growth, viability and cell-cycle panels (1–2 minutes).
+# The executed copy goes to /tmp, so the tracked notebook stays unchanged.
+jupyter nbconvert --to notebook --execute --output-dir /tmp \
     notebooks/250214_growth_viability_cellcycle_pub.ipynb
 ls figures/        # growth_curves.pdf, viability_curves.pdf, cellcycle_*.pdf, ...
 ```
@@ -68,10 +70,11 @@ repository root by itself, so it can be opened from anywhere inside the clone.
 | `bulk_RT_pub` | Replication-timing distribution of each mark | processed-read tables |
 
 **`fetch`** is one command that downloads this study's processed data from Zenodo and the
-public reference files (GENCODE, MSigDB, ENCODE, Repli-seq) into `data/`, with checksums:
+public reference files (GENCODE, MSigDB, ENCODE, Repli-seq) into `data/`. It verifies the
+MD5 checksum of every Zenodo file:
 
 ```bash
-bash processing_scripts/run.sh fetch          # about 2.8 GB
+bash processing_scripts/run.sh fetch          # about 3.3 GB
 ```
 
 **Processed-read tables** are built from the raw GEO reads by `processing_scripts/`. Those
