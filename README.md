@@ -7,16 +7,6 @@ Analysis code for *"Histone H3K27 methylation states are sequentially catalyzed 
 cells"* by Jacob E. Greene, Kami Ahmad and Steven Henikoff (2026),
 [bioRxiv 10.64898/2026.04.30.721988](https://doi.org/10.64898/2026.04.30.721988).
 
-**The finding.** Polycomb domains silence developmental genes and are marked by
-tri-methylation of histone H3 lysine 27 (H3K27me3). Every S phase halves that mark, because
-new, unmodified histones are deposited behind the replication fork. We used CUT&Tag on
-human K562 cells sorted into S-phase fractions to follow H3K27me1, -me2 and -me3 through
-replication. H3K27me3 in Polycomb domains is restored *stepwise* (me1, then me2, then me3)
-after DNA replication. Outside Polycomb domains, thousands of inactive genes gain H3K27me2
-hours after replication. Acute inhibition of PRC2, the H3K27 methyltransferase, slows this
-re-methylation during S phase and raises H3K27 acetylation, most strongly at
-early-replicating Polycomb domains.
-
 ![Figure 1](Fig1.png)
 
 <sub>**Figure 1.** (A) H3K27me3, me2, me1, H3K27ac and RNA polymerase II CUT&Tag around a
