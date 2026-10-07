@@ -69,6 +69,7 @@ data/
 `250411_peakPrint_clean_pub.ipynb` writes all fifteen `{mark}_{cell}_top95regions.bed`
 files, but as published it reads only `K27me3_K_peak_coverage.bed`. It therefore
 regenerates `K27me3_K_top95regions.bed` (identical to the Zenodo copy) and writes the other
-fourteen files empty. `Peak_heatmaps_v2.sh` needs the five `*_K_*` files, so after running
-that notebook, run `bash processing_scripts/run.sh fetch zenodo` again: it re-downloads any
-empty file and checks every checksum.
+fourteen files empty. `Peak_heatmaps_v2.sh` needs the five `*_K_*` files, and
+`260803_WT_timeseries_clean_chromHMM_pub.ipynb` reads four of them, so after running
+`250411`, run `bash processing_scripts/run.sh fetch zenodo` again: it re-downloads any empty
+file and checks every checksum.
