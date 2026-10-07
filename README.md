@@ -88,7 +88,7 @@ itself is archived on Zenodo at
 
 ## AI Use Statement
 
-The analysis code (i.e. jupyter notebooks) in this repository was written by Jacob Greene. Claude-code was used to modify paths to align with processing scripts (i.e. fetching public data) that were written for end-to-end reproducibility AFTER manuscript submission. Please flag any issues on this repo and/or refer them jacobgreene@gmail.com.
+The analysis code (i.e. jupyter notebooks) in this repository was written by Jacob Greene. Claude-code was used to modify paths to align with processing scripts (i.e. fetching public data) that were written for end-to-end reproducibility. Please flag any issues on this repo and/or refer them jacobgreene@gmail.com.
 
 ## License
 
