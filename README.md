@@ -4,8 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Analysis code for *"Histone H3K27 methylation states are sequentially catalyzed in cycling
-cells"* by Jacob E. Greene, Kami Ahmad and Steven Henikoff (2026),
-[Cell Reports https://doi.org/10.1016/j.celrep.2026.118149](https://doi.org/10.1016/j.celrep.2026.118149). 
+cells"* by Jacob E. Greene, Kami Ahmad and Steven Henikoff (2026) Cell Reports,
+[https://doi.org/10.1016/j.celrep.2026.118149](https://doi.org/10.1016/j.celrep.2026.118149). 
 
 ![Figure 1](Fig1.png)
 
